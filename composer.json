@@ -1,0 +1,34 @@
+{
+    "name": "brnbio/laravel-form",
+    "description": "Form helper for Laravel framework",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Frank Heider",
+            "email": "heider@brnb.io"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {},
+    "autoload": {
+        "files": [
+            "src/helpers.php"
+        ],
+        "psr-4": {
+            "Brnbio\\LaravelForm\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Brnbio\\LaravelForm\\FormServiceProvider"
+            ]
+        }
+    }
+}
