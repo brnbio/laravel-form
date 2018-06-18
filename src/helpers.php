@@ -10,6 +10,6 @@ if (! function_exists('form')) {
      */
     function form()
     {
-        return \Brnbio\LaravelForm\FormHelper::getInstance();
+        return \Brnbio\LaravelForm\Form\Helper::getInstance();
     }
 }
