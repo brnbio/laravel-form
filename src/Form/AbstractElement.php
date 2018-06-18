@@ -59,7 +59,7 @@ class AbstractElement
     public function getTemplate(): string
     {
         /** @var string $template */
-        if ($template = config(self::class)) {
+        if ($template = config('laravel-form.templates.' . static::class)) {
             return $template;
         }
 

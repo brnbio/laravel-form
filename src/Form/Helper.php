@@ -36,7 +36,7 @@ class Helper
     protected $templater;
 
     /**
-     * @var Model|null
+     * @var Context|null
      */
     protected $context = null;
 
@@ -71,13 +71,34 @@ class Helper
     }
 
     /**
+     * @param string $fieldName
+     * @param array $options
+     * @return HtmlString
+     */
+    public function control(string $fieldName, array $options = []): HtmlString
+    {
+        $element = new Element\Control($fieldName, $options, $this->getMetadata($fieldName));
+        $label = $this->label($options['label'] ?? ucfirst($fieldName), [
+            'for' => $fieldName,
+        ]);
+
+        return $this->templater()->formatTemplate($element->getTemplate(), [
+            'label' => $label,
+            'control' => null,
+            'attrs' => $this->templater()->formatAttributes($element->getAttributes()),
+        ]);
+    }
+
+    /**
      * @param Model|null $context
      * @param array $options
      * @return HtmlString
      */
     public function create(Model $context = null, array $options = []): HtmlString
     {
-        $this->context = $context;
+        if (null !== $context) {
+            $this->context = new Context($context);
+        }
 
         $element = new Element\FormStart($options);
         $placeholders = [
@@ -86,5 +107,40 @@ class Helper
         ];
 
         return $this->templater()->formatTemplate($element->getTemplate(), $placeholders);
+    }
+
+    /**
+     * @return HtmlString
+     */
+    public function end(): HtmlString
+    {
+        $this->context = null;
+        $element = new Element\FormEnd();
+
+        return $this->templater()->formatTemplate($element->getTemplate());
+    }
+
+    /**
+     * @param string $text
+     * @param array $options
+     * @return HtmlString
+     */
+    public function label(string $text, array $options = []): HtmlString
+    {
+        $element = new Element\Label($text, $options);
+
+        return $this->templater()->formatTemplate($element->getTemplate(), [
+            'text' => $text,
+            'attrs' => $this->templater()->formatAttributes($element->getAttributes()),
+        ]);
+    }
+
+    /**
+     * @param string $fieldName
+     * @return array
+     */
+    private function getMetadata(string $fieldName): array
+    {
+        return ($this->context instanceof Context) ? $this->context->getMetadata($fieldName) : [];
     }
 }

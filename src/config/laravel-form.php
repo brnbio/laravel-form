@@ -21,9 +21,10 @@ return [
     */
 
     'css' => [
+        'error' => 'error',
         'input' => 'form-control',
         'inputContainer' => 'form-group',
-        'error' => 'error',
+        'required' => 'required',
     ],
 
     /*
@@ -37,7 +38,10 @@ return [
     */
 
     'typeMap' => [
-        'string' => 'text',
+        'varchar' => 'text',
+        'longtext' => 'textarea',
+
+        /*'string' => 'text',
         'text' => 'textarea',
         'uuid' => 'string',
         'datetime' => 'datetime',
@@ -50,7 +54,7 @@ return [
         'tinyinteger' => 'number',
         'smallinteger' => 'number',
         'decimal' => 'number',
-        'binary' => 'file',
+        'binary' => 'file',*/
     ],
 
     /*
@@ -63,6 +67,10 @@ return [
     */
 
     'templates' => [
+        \Brnbio\LaravelForm\Form\Element\FormStart::class => '<form{{attrs}}>{{csrf}}',
+        \Brnbio\LaravelForm\Form\Element\FormEnd::class => '</form>',
+        \Brnbio\LaravelForm\Form\Element\Label::class => '<label{{attrs}}>{{text}}</label>',
+
         'button' => '<button{{attrs}}>{{text}}</button>',
         'checkbox' => '<input type="checkbox" name="{{name}}" value="{{value}}"{{attrs}}>',
         'checkboxFormGroup' => '{{label}}',
@@ -73,7 +81,7 @@ return [
         'errorItem' => '<li>{{text}}</li>',
         'file' => '<input type="file" name="{{name}}"{{attrs}}>',
         'fieldset' => '<fieldset{{attrs}}>{{content}}</fieldset>',
-        \Brnbio\LaravelForm\Form\Element\FormStart::class => '<form{{attrs}}>{{csrf}}',
+
         'formEnd' => '</form>',
         'formGroup' => '{{label}}{{input}}',
         'hiddenBlock' => '<div style="display:none;">{{content}}</div>',
@@ -81,7 +89,7 @@ return [
         'inputSubmit' => '<input type="{{type}}"{{attrs}}/>',
         'inputContainer' => '<div{{attrs}}>{{label}}{{control}}</div>',
         'inputContainerError' => '<div class="form-group {{type}}{{required}} error">{{label}}{{control}}{{error}}</div>',
-        'label' => '<label{{attrs}}>{{text}}</label>',
+
         'nestingLabel' => '{{hidden}}<label{{attrs}}>{{input}}{{text}}</label>',
         'legend' => '<legend>{{text}}</legend>',
         'multicheckboxTitle' => '<legend>{{text}}</legend>',
