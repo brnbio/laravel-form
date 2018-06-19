@@ -1,14 +1,22 @@
 <?php
 
+/**
+ * helpers.php
+ *
+ * @copyright   Copyright (c) brainbo UG (haftungsbeschränkt) (http://brnb.io)
+ * @author      Frank Heider <heider@brnb.io>
+ * @since       2018-06-18
+ */
+
+declare(strict_types=1);
+
 if (! function_exists('form')) {
     /**
      * Get the available container instance.
      *
-     * @param  string  $abstract
-     * @param  array   $parameters
      * @return \Brnbio\LaravelForm\Form\Helper
      */
-    function form()
+    function form(): \Brnbio\LaravelForm\Form\Helper
     {
         return \Brnbio\LaravelForm\Form\Helper::getInstance();
     }

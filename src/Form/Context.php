@@ -24,10 +24,20 @@ use Illuminate\Support\Facades\DB;
  */
 class Context
 {
+    /**
+     * @var Model
+     */
     protected $entity;
 
+    /**
+     * @var mixed[]
+     */
     protected $metadata = [];
 
+    /**
+     * Context constructor.
+     * @param Model $entity
+     */
     public function __construct(Model $entity)
     {
         $this->entity = $entity;
@@ -35,8 +45,20 @@ class Context
     }
 
     /**
+     * @param string $fieldName
+     * @return array
+     */
+    public function getMetadata(string $fieldName): array
+    {
+        if (! empty($this->metadata[$fieldName])) {
+            return $this->metadata[$fieldName];
+        }
+
+        return [];
+    }
+
+    /**
      * @param string $tableName
-     * @param Connection $connection
      * @return array
      */
     private function initMetadata(string $tableName): array
@@ -48,26 +70,12 @@ class Context
             $metadata[$field->Field] = [
                 'name' => $field->Field,
                 'type' => $fieldType[1],
-                'required' => 'NO' === $field->Null && null === $field->Default,
+                'required' => $field->Null === 'NO' && $field->Default === null,
                 'default' => $field->Default,
-                'maxlength' => !empty($fieldType[2]) ? $fieldType[2] : null
+                'maxlength' => ! empty($fieldType[2]) ? $fieldType[2] : null,
             ];
         }
 
         return $metadata;
     }
-
-    /**
-     * @param string $fieldName
-     * @return array
-     */
-    public function getMetadata(string $fieldName): array
-    {
-        if (!empty($this->metadata[$fieldName])) {
-            return $this->metadata[$fieldName];
-        }
-
-        return [];
-    }
-
 }

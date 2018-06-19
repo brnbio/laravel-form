@@ -13,7 +13,6 @@ declare(strict_types=1);
 namespace Brnbio\LaravelForm\Form;
 
 use Brnbio\LaravelForm\Form\Element as Element;
-use Brnbio\LaravelForm\Template\StringTemplate;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\HtmlString;
 
@@ -38,10 +37,10 @@ class Helper
     /**
      * @return Helper
      */
-    public static function getInstance(): Helper
+    public static function getInstance(): self
     {
-        if (is_null(static::$instance)) {
-            static::$instance = new static;
+        if (static::$instance === null) {
+            static::$instance = new static();
         }
 
         return static::$instance;
@@ -63,9 +62,9 @@ class Helper
      * @param array $options
      * @return HtmlString
      */
-    public function create(Model $context = null, array $options = []): HtmlString
+    public function create(?Model $context = null, array $options = []): HtmlString
     {
-        if (null !== $context) {
+        if ($context !== null) {
             $this->context = new Context($context);
         }
 

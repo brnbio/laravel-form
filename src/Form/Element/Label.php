@@ -68,9 +68,6 @@ class Label extends AbstractElement
         ]);
     }
 
-    /**
-     * @return void
-     */
     protected function addAdditionalAllowedAttributes(array $attributes = []): void
     {
         parent::addAdditionalAllowedAttributes([

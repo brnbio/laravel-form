@@ -20,7 +20,6 @@
  * A form element must have both a start tag and an end tag.
  * (end tag > Brnbio\LaravelForm\Form\Element\FormEnd)
  *
- *
  * @copyright   Copyright (c) brainbo UG (haftungsbeschränkt) (http://brnb.io)
  * @author      Frank Heider <heider@brnb.io>
  * @since       2018-06-18
@@ -64,7 +63,7 @@ class FormStart extends AbstractElement
         parent::__construct();
         $options += $this->defaultOptions;
 
-        if (isset($options['type']) && 'file' === $options['type']) {
+        if (isset($options['type']) && $options['type'] === 'file') {
             $options['enctype'] = 'multipart/form-data';
         }
 
@@ -82,9 +81,6 @@ class FormStart extends AbstractElement
         ]);
     }
 
-    /**
-     * @return void
-     */
     protected function addAdditionalAllowedAttributes(array $attributes = []): void
     {
         parent::addAdditionalAllowedAttributes([
@@ -100,7 +96,6 @@ class FormStart extends AbstractElement
 
     /**
      * @param array $attributesValues
-     * @return void
      */
     protected function addAdditionalAllowedAttributesValues(array $attributesValues = []): void
     {

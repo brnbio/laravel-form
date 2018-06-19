@@ -71,17 +71,17 @@ class Control extends AbstractElement
 
         $options += $this->defaultOptions;
 
-        if (!isset($options['class'])) {
+        if (! isset($options['class'])) {
             $options['class'] = config('laravel-form.css.inputContainer');
-            if (!empty($metadata['type'])) {
+            if (! empty($metadata['type'])) {
                 $options['class'] .= ' ' . $metadata['type'];
             }
-            if (!empty($metadata['required'])) {
+            if (! empty($metadata['required'])) {
                 $options['class'] .= ' ' . config('laravel-form.css.required');
             }
         }
 
-        if (!isset($options['label'])) {
+        if (! isset($options['label'])) {
             $options['label'] = Str::camel($fieldName);
         }
 
@@ -99,7 +99,7 @@ class Control extends AbstractElement
         return $this->templater->formatTemplate($this->getTemplate(), [
             'label' => $this->renderLabel($this->label),
             'control' => null,
-            'attrs' => $this->templater->formatAttributes($this->getAttributes())
+            'attrs' => $this->templater->formatAttributes($this->getAttributes()),
         ]);
     }
 
@@ -107,9 +107,9 @@ class Control extends AbstractElement
      * @param string|null $label
      * @return string
      */
-    private function renderLabel(string $label = null): HtmlString
+    private function renderLabel(?string $label = null): HtmlString
     {
-        if (null === $label) {
+        if ($label === null) {
             return new HtmlString('');
         }
 

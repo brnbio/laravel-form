@@ -24,7 +24,7 @@ use Illuminate\Support\HtmlString;
 abstract class AbstractElement
 {
     /**
-     * @var array
+     * @var mixed[]
      */
     protected $defaultOptions = [];
 
@@ -34,7 +34,7 @@ abstract class AbstractElement
     protected $defaultTemplate = '';
 
     /**
-     * @var array
+     * @var string[]
      */
     protected $allowedAttributes = [
         'accesskey',
@@ -53,7 +53,7 @@ abstract class AbstractElement
     ];
 
     /**
-     * @var array
+     * @var mixed[]
      */
     protected $allowedAttributeValues = [
         'contenteditable' => [
@@ -75,7 +75,7 @@ abstract class AbstractElement
     ];
 
     /**
-     * @var array
+     * @var mixed[]
      */
     protected $attributes = [];
 
@@ -87,7 +87,6 @@ abstract class AbstractElement
     /**
      * Helper constructor.
      * Init template engine
-     *
      */
     public function __construct()
     {
@@ -96,13 +95,10 @@ abstract class AbstractElement
         $this->addAdditionalAllowedAttributesValues();
     }
 
-    /**
-     * @return HtmlString
-     */
     abstract public function render(): HtmlString;
 
     /**
-     * @return array
+     * @return mixed[]
      */
     public function getAttributes(): array
     {
@@ -114,25 +110,20 @@ abstract class AbstractElement
      */
     public function getTemplate(): string
     {
-        /** @var string $template */
-        if ($template = config('laravel-form.templates.' . static::class)) {
-            return $template;
-        }
-
-        return $this->defaultTemplate;
+        return config('laravel-form.templates.' . static::class) ?: $this->defaultTemplate;
     }
 
     /**
-     * @param array $options
-     * @return array
+     * @param mixed[] $options
+     * @return mixed[]
      */
     protected function validateAttributes(array $options = []): array
     {
         foreach ($options as $key => $value) {
-            if (!in_array($key, $this->allowedAttributes)) {
+            if (! in_array($key, $this->allowedAttributes, true)) {
                 unset($options[$key]);
             } else {
-                if (false === $this->validateAttributeValue($key, $options[$key])) {
+                if ($this->validateAttributeValue($key, $options[$key]) === false) {
                     unset($options[$key]);
                 }
             }
@@ -142,7 +133,7 @@ abstract class AbstractElement
     }
 
     /**
-     * @return void
+     * @param string[] $attributes
      */
     protected function addAdditionalAllowedAttributes(array $attributes = []): void
     {
@@ -150,7 +141,7 @@ abstract class AbstractElement
     }
 
     /**
-     * @return void
+     * @param mixed[] $attributesValues
      */
     protected function addAdditionalAllowedAttributesValues(array $attributesValues = []): void
     {
@@ -162,12 +153,12 @@ abstract class AbstractElement
      * @param string|null $value
      * @return bool
      */
-    private function validateAttributeValue(string $key, string $value = null): bool
+    private function validateAttributeValue(string $key, ?string $value = null): bool
     {
         if (empty($this->allowedAttributeValues[$key])) {
             return true;
         }
 
-        return !empty($value) && in_array($value, $this->allowedAttributeValues[$key]);
+        return ! empty($value) && in_array($value, $this->allowedAttributeValues[$key], true);
     }
 }

@@ -46,7 +46,7 @@ class StringTemplate
     {
         $attributes = [];
         foreach ($options as $key => $value) {
-            if (!in_array($key, $exclude)) {
+            if (! in_array($key, $exclude, true)) {
                 $attributes[] = $this->formatAttribute($key, $value);
             }
         }
@@ -55,11 +55,11 @@ class StringTemplate
     }
 
     /**
-     * @param $key
-     * @param $value
+     * @param string $key
+     * @param string $value
      * @return string
      */
-    private function formatAttribute($key, $value): string
+    private function formatAttribute(string $key, string $value): string
     {
         if (is_numeric($key)) {
             $value = $key;
