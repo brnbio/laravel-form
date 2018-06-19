@@ -3,9 +3,18 @@
 /**
  * Control.php
  *
+ * A special div container which include a label element and an input element.
+ *
+ * Permitted attributes:
+ * - common attributes
+ *
+ * Tag omission:
+ * A div element must have both a start tag and an end tag.
+ *
  * @copyright   Copyright (c) brainbo UG (haftungsbeschränkt) (http://brnb.io)
  * @author      Frank Heider <heider@brnb.io>
  * @since       2018-06-18
+ * @link        https://www.w3.org/TR/2010/WD-html-markup-20100624/div.html
  */
 
 declare(strict_types=1);

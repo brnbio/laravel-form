@@ -56,10 +56,22 @@ abstract class AbstractElement
      * @var array
      */
     protected $allowedAttributeValues = [
-        'contenteditable' => ['true', 'false'],
-        'dir' => ['ltr', 'rtl'],
-        'draggable' => ['true', 'false'],
-        'spellcheck' => ['true', 'false'],
+        'contenteditable' => [
+            'true',
+            'false',
+        ],
+        'dir' => [
+            'ltr',
+            'rtl',
+        ],
+        'draggable' => [
+            'true',
+            'false',
+        ],
+        'spellcheck' => [
+            'true',
+            'false',
+        ],
     ];
 
     /**
@@ -80,6 +92,8 @@ abstract class AbstractElement
     public function __construct()
     {
         $this->templater = new StringTemplate();
+        $this->addAdditionalAllowedAttributes();
+        $this->addAdditionalAllowedAttributesValues();
     }
 
     /**
@@ -125,6 +139,22 @@ abstract class AbstractElement
         }
 
         return $options;
+    }
+
+    /**
+     * @return void
+     */
+    protected function addAdditionalAllowedAttributes(array $attributes = []): void
+    {
+        $this->allowedAttributes = array_merge($this->allowedAttributes, $attributes);
+    }
+
+    /**
+     * @return void
+     */
+    protected function addAdditionalAllowedAttributesValues(array $attributesValues = []): void
+    {
+        $this->allowedAttributeValues = array_merge($this->allowedAttributeValues, $attributesValues);
     }
 
     /**

@@ -3,9 +3,12 @@
 /**
  * FormEnd.php
  *
+ * See \Brnbio\LaravelForm\Form\Element\FormStart for further information
+ *
  * @copyright   Copyright (c) brainbo UG (haftungsbeschränkt) (http://brnb.io)
  * @author      Frank Heider <heider@brnb.io>
  * @since       2018-06-18
+ * @link        https://www.w3.org/TR/2010/WD-html-markup-20100624/form.html
  */
 
 declare(strict_types=1);
@@ -27,6 +30,11 @@ class FormEnd extends AbstractElement
      * @var string
      */
     protected $defaultTemplate = '</form>';
+
+    /**
+     * @var array
+     */
+    protected $allowedAttributes = [];
 
     /**
      * @return HtmlString
