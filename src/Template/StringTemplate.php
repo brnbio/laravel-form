@@ -30,7 +30,7 @@ class StringTemplate
     public function formatTemplate(string $template, array $placeholders = []): HtmlString
     {
         foreach ($placeholders as $key => $value) {
-            $template = str_replace('{{' . $key . '}}', ' ' . $value, $template);
+            $template = str_replace('{{' . $key . '}}', '' . $value, $template);
         }
         $template = preg_replace('#\{\{([\w\._]+)\}\}#', '', $template);
 
@@ -51,7 +51,7 @@ class StringTemplate
             }
         }
 
-        return trim(implode(' ', $attributes));
+        return ' ' . trim(implode(' ', $attributes));
     }
 
     /**

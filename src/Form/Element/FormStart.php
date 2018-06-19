@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace Brnbio\LaravelForm\Form\Element;
 
 use Brnbio\LaravelForm\Form\AbstractElement;
+use Illuminate\Support\HtmlString;
 
 /**
  * Class FormStart
@@ -27,7 +28,6 @@ class FormStart extends AbstractElement
      */
     protected $defaultOptions = [
         'method' => 'post',
-        'action' => null,
         'accept-charset' => 'utf-8',
     ];
 
@@ -43,6 +43,7 @@ class FormStart extends AbstractElement
         'accept-charset',
         'action',
         'autocomplete',
+        'class',
         'enctype',
         'method',
         'name',
@@ -66,16 +67,25 @@ class FormStart extends AbstractElement
      */
     public function __construct(array $options = [])
     {
+        parent::__construct();
+
         $options += $this->defaultOptions;
 
         if ('file' === $options['method']) {
             $options['enctype'] = 'multipart/form-data';
         }
 
-        if (null === $options['action']) {
-            $options['action'] = request()->fullUrl();
-        }
-
         $this->attributes = $this->validateAttributes($options);
+    }
+
+    /**
+     * @return HtmlString
+     */
+    public function render(): HtmlString
+    {
+        return $this->templater->formatTemplate($this->getTemplate(), [
+            'attrs' => $this->templater->formatAttributes($this->attributes),
+            'csrf' => csrf_field(),
+        ]);
     }
 }

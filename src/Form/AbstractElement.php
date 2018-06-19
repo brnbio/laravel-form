@@ -12,13 +12,16 @@ declare(strict_types=1);
 
 namespace Brnbio\LaravelForm\Form;
 
+use Brnbio\LaravelForm\Template\StringTemplate;
+use Illuminate\Support\HtmlString;
+
 /**
  * Class AbstractElement
  *
  * @package Brnbio\LaravelForm
  * @subpackage Form
  */
-class AbstractElement
+abstract class AbstractElement
 {
     /**
      * @var array
@@ -33,17 +36,56 @@ class AbstractElement
     /**
      * @var array
      */
-    protected $allowedAttributes = [];
+    protected $allowedAttributes = [
+        'accesskey',
+        'class',
+        'contenteditable',
+        'contextmenu',
+        'dir',
+        'draggable',
+        'hidden',
+        'id',
+        'lang',
+        'spellcheck',
+        'style',
+        'tabindex',
+        'title',
+    ];
 
     /**
      * @var array
      */
-    protected $allowedAttributeValues = [];
+    protected $allowedAttributeValues = [
+        'contenteditable' => ['true', 'false'],
+        'dir' => ['ltr', 'rtl'],
+        'draggable' => ['true', 'false'],
+        'spellcheck' => ['true', 'false'],
+    ];
 
     /**
      * @var array
      */
     protected $attributes = [];
+
+    /**
+     * @var StringTemplate
+     */
+    protected $templater;
+
+    /**
+     * Helper constructor.
+     * Init template engine
+     *
+     */
+    public function __construct()
+    {
+        $this->templater = new StringTemplate();
+    }
+
+    /**
+     * @return HtmlString
+     */
+    abstract public function render(): HtmlString;
 
     /**
      * @return array

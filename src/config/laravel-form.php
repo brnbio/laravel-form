@@ -67,9 +67,16 @@ return [
     */
 
     'templates' => [
-        \Brnbio\LaravelForm\Form\Element\FormStart::class => '<form{{attrs}}>{{csrf}}',
-        \Brnbio\LaravelForm\Form\Element\FormEnd::class => '</form>',
-        \Brnbio\LaravelForm\Form\Element\Label::class => '<label{{attrs}}>{{text}}</label>',
+        \Brnbio\LaravelForm\Form\Element\Control::class     => '<div{{attrs}}>{{label}}{{control}}</div>',
+        \Brnbio\LaravelForm\Form\Element\FormStart::class   => '<form{{attrs}}>{{csrf}}',
+        \Brnbio\LaravelForm\Form\Element\FormEnd::class     => '</form>',
+        \Brnbio\LaravelForm\Form\Element\Label::class       => '<label{{attrs}}>{{text}}</label>',
+
+
+
+
+
+
 
         'button' => '<button{{attrs}}>{{text}}</button>',
         'checkbox' => '<input type="checkbox" name="{{name}}" value="{{value}}"{{attrs}}>',

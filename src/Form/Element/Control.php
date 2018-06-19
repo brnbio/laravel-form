@@ -13,6 +13,8 @@ declare(strict_types=1);
 namespace Brnbio\LaravelForm\Form\Element;
 
 use Brnbio\LaravelForm\Form\AbstractElement;
+use Illuminate\Support\HtmlString;
+use Illuminate\Support\Str;
 
 /**
  * Class Control
@@ -23,23 +25,29 @@ use Brnbio\LaravelForm\Form\AbstractElement;
 class Control extends AbstractElement
 {
     /**
-     * @var array
-     */
-    protected $defaultOptions = [
-        'class' => null,
-    ];
-
-    /**
      * @var string
      */
     protected $defaultTemplate = '<div{{attrs}}>{{label}}{{control}}</div>';
 
     /**
+     * @var string
+     */
+    protected $fieldName;
+
+    /**
+     * @var string
+     */
+    protected $label;
+
+    /**
+     * @var string
+     */
+    protected $control;
+
+    /**
      * @var array
      */
-    protected $allowedAttributes = [
-        'class',
-    ];
+    protected $metadata = [];
 
     /**
      * Control constructor
@@ -50,9 +58,11 @@ class Control extends AbstractElement
      */
     public function __construct(string $fieldName, array $options = [], array $metadata = [])
     {
+        parent::__construct();
+
         $options += $this->defaultOptions;
 
-        if (null === $options['class']) {
+        if (!isset($options['class'])) {
             $options['class'] = config('laravel-form.css.inputContainer');
             if (!empty($metadata['type'])) {
                 $options['class'] .= ' ' . $metadata['type'];
@@ -62,6 +72,39 @@ class Control extends AbstractElement
             }
         }
 
+        if (!isset($options['label'])) {
+            $options['label'] = Str::camel($fieldName);
+        }
+
+        $this->fieldName = $fieldName;
+        $this->label = $options['label'];
+        $this->metadata = $metadata;
         $this->attributes = $this->validateAttributes($options);
+    }
+
+    /**
+     * @return HtmlString
+     */
+    public function render(): HtmlString
+    {
+        return $this->templater->formatTemplate($this->getTemplate(), [
+            'label' => $this->renderLabel($this->label),
+            'control' => null,
+            'attrs' => $this->templater->formatAttributes($this->getAttributes())
+        ]);
+    }
+
+    /**
+     * @param string|null $label
+     * @return string
+     */
+    private function renderLabel(string $label = null): HtmlString
+    {
+        if (null === $label) {
+            return new HtmlString('');
+        }
+
+        return (new Label($label, ['for' => $this->fieldName]))
+            ->render();
     }
 }

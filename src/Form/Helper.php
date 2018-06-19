@@ -31,24 +31,9 @@ class Helper
     protected static $instance;
 
     /**
-     * @var StringTemplate
-     */
-    protected $templater;
-
-    /**
      * @var Context|null
      */
     protected $context = null;
-
-    /**
-     * Helper constructor.
-     * Init template engine
-     *
-     */
-    public function __construct()
-    {
-        $this->templater = new StringTemplate();
-    }
 
     /**
      * @return Helper
@@ -63,30 +48,14 @@ class Helper
     }
 
     /**
-     * @return StringTemplate
-     */
-    public function templater(): StringTemplate
-    {
-        return $this->templater;
-    }
-
-    /**
      * @param string $fieldName
      * @param array $options
      * @return HtmlString
      */
     public function control(string $fieldName, array $options = []): HtmlString
     {
-        $element = new Element\Control($fieldName, $options, $this->getMetadata($fieldName));
-        $label = $this->label($options['label'] ?? ucfirst($fieldName), [
-            'for' => $fieldName,
-        ]);
-
-        return $this->templater()->formatTemplate($element->getTemplate(), [
-            'label' => $label,
-            'control' => null,
-            'attrs' => $this->templater()->formatAttributes($element->getAttributes()),
-        ]);
+        return (new Element\Control($fieldName, $options, $this->getMetadata($fieldName)))
+            ->render();
     }
 
     /**
@@ -100,13 +69,8 @@ class Helper
             $this->context = new Context($context);
         }
 
-        $element = new Element\FormStart($options);
-        $placeholders = [
-            'attrs' => $this->templater()->formatAttributes($element->getAttributes()),
-            'csrf' => csrf_field(),
-        ];
-
-        return $this->templater()->formatTemplate($element->getTemplate(), $placeholders);
+        return with(new Element\FormStart($options))
+            ->render();
     }
 
     /**
@@ -115,9 +79,9 @@ class Helper
     public function end(): HtmlString
     {
         $this->context = null;
-        $element = new Element\FormEnd();
 
-        return $this->templater()->formatTemplate($element->getTemplate());
+        return (new Element\FormEnd())
+            ->render();
     }
 
     /**
@@ -127,12 +91,8 @@ class Helper
      */
     public function label(string $text, array $options = []): HtmlString
     {
-        $element = new Element\Label($text, $options);
-
-        return $this->templater()->formatTemplate($element->getTemplate(), [
-            'text' => $text,
-            'attrs' => $this->templater()->formatAttributes($element->getAttributes()),
-        ]);
+        return (new Element\Label($text, $options))
+            ->render();
     }
 
     /**

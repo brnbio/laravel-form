@@ -6,7 +6,7 @@ if (! function_exists('form')) {
      *
      * @param  string  $abstract
      * @param  array   $parameters
-     * @return mixed|\Illuminate\Foundation\Application
+     * @return \Brnbio\LaravelForm\Form\Helper
      */
     function form()
     {

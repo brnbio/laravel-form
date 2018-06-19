@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace Brnbio\LaravelForm\Form\Element;
 
 use Brnbio\LaravelForm\Form\AbstractElement;
+use Illuminate\Support\HtmlString;
 
 /**
  * Class Label
@@ -36,6 +37,11 @@ class Label extends AbstractElement
     ];
 
     /**
+     * @var string
+     */
+    protected $text;
+
+    /**
      * Label constructor
      *
      * @param string $text
@@ -43,6 +49,19 @@ class Label extends AbstractElement
      */
     public function __construct(string $text, array $options = [])
     {
+        parent::__construct();
+        $this->text = trim($text);
         $this->attributes = $this->validateAttributes($options);
+    }
+
+    /**
+     * @return HtmlString
+     */
+    public function render(): HtmlString
+    {
+        return $this->templater->formatTemplate($this->getTemplate(), [
+            'text' => $this->text,
+            'attrs' => $this->templater->formatAttributes($this->attributes),
+        ]);
     }
 }
