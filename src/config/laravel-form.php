@@ -58,6 +58,7 @@ return [
         \Brnbio\LaravelForm\Form\Element\FormStart::class => '<form{{attrs}}>{{csrf}}',
         \Brnbio\LaravelForm\Form\Element\FormEnd::class => '</form>',
         \Brnbio\LaravelForm\Form\Element\Label::class => '<label{{attrs}}>{{text}}</label>',
+        \Brnbio\LaravelForm\Form\Element\Button::class => '<button{{attrs}}>{{text}}</button>',
     ],
 
 ];

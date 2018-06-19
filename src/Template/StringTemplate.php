@@ -51,18 +51,18 @@ class StringTemplate
             }
         }
 
-        return ' ' . trim(implode(' ', $attributes));
+        return empty($attributes) ? '' : ' ' . trim(implode(' ', $attributes));
     }
 
     /**
      * @param string $key
-     * @param string $value
+     * @param mixed $value
      * @return string
      */
-    private function formatAttribute(string $key, string $value): string
+    private function formatAttribute(string $key, $value): string
     {
-        if (is_numeric($key)) {
-            $value = $key;
+        if ($key === $value) {
+            return $value;
         }
 
         if (is_array($value)) {

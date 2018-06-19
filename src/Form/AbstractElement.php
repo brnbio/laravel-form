@@ -120,6 +120,11 @@ abstract class AbstractElement
     protected function validateAttributes(array $options = []): array
     {
         foreach ($options as $key => $value) {
+            if (is_numeric($key)) {
+                unset($options[$key]);
+                $key = $value;
+                $options[$key] = $value;
+            }
             if (! in_array($key, $this->allowedAttributes, true)) {
                 unset($options[$key]);
             } else {
@@ -150,10 +155,10 @@ abstract class AbstractElement
 
     /**
      * @param string $key
-     * @param string|null $value
+     * @param mixed|null $value
      * @return bool
      */
-    private function validateAttributeValue(string $key, ?string $value = null): bool
+    private function validateAttributeValue(string $key, $value = null): bool
     {
         if (empty($this->allowedAttributeValues[$key])) {
             return true;

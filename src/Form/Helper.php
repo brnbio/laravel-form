@@ -47,6 +47,17 @@ class Helper
     }
 
     /**
+     * @param string $text
+     * @param array $options
+     * @return HtmlString
+     */
+    public function button(string $text, array $options = []): HtmlString
+    {
+        return (new Element\Button($text, $options))
+            ->render();
+    }
+
+    /**
      * @param string $fieldName
      * @param array $options
      * @return HtmlString
@@ -92,6 +103,30 @@ class Helper
     {
         return (new Element\Label($text, $options))
             ->render();
+    }
+
+    /**
+     * @param string $text
+     * @param array $options
+     * @return HtmlString
+     */
+    public function reset(string $text, array $options = []): HtmlString
+    {
+        return $this->button($text, [
+            'type' => 'reset',
+        ] + $options);
+    }
+
+    /**
+     * @param string $text
+     * @param array $options
+     * @return HtmlString
+     */
+    public function submit(string $text, array $options = []): HtmlString
+    {
+        return $this->button($text, [
+            'type' => 'submit',
+        ] + $options);
     }
 
     /**
