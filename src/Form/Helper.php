@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace Brnbio\LaravelForm\Form;
 
-use Brnbio\LaravelForm\Form\Element as Element;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\HtmlString;
 
@@ -53,7 +52,8 @@ class Helper
      */
     public function button(string $text, array $options = []): HtmlString
     {
-        return (new Element\Button($text, $options))
+        return $this
+            ->getElementByName('button', $text, $options)
             ->render();
     }
 
@@ -64,7 +64,8 @@ class Helper
      */
     public function control(string $fieldName, array $options = []): HtmlString
     {
-        return (new Element\Control($fieldName, $options, $this->getMetadata($fieldName)))
+        return $this
+            ->getElementByName('control', $fieldName, $options, $this->getMetadata($fieldName))
             ->render();
     }
 
@@ -79,7 +80,8 @@ class Helper
             $this->context = new Context($context);
         }
 
-        return with(new Element\FormStart($options))
+        return $this
+            ->getElementByName('formStart', $options)
             ->render();
     }
 
@@ -90,7 +92,8 @@ class Helper
     {
         $this->context = null;
 
-        return (new Element\FormEnd())
+        return $this
+            ->getElementByName('formEnd')
             ->render();
     }
 
@@ -101,7 +104,8 @@ class Helper
      */
     public function label(string $text, array $options = []): HtmlString
     {
-        return (new Element\Label($text, $options))
+        return $this
+            ->getElementByName('label', $text, $options)
             ->render();
     }
 
@@ -112,9 +116,11 @@ class Helper
      */
     public function reset(string $text, array $options = []): HtmlString
     {
-        return $this->button($text, [
-            'type' => 'reset',
-        ] + $options);
+        $options['type'] = 'reset';
+
+        return $this
+            ->getElementByName('button', $text, $options)
+            ->render();
     }
 
     /**
@@ -124,9 +130,11 @@ class Helper
      */
     public function submit(string $text, array $options = []): HtmlString
     {
-        return $this->button($text, [
-            'type' => 'submit',
-        ] + $options);
+        $options['type'] = 'submit';
+
+        return $this
+            ->getElementByName('button', $text, $options)
+            ->render();
     }
 
     /**
@@ -135,6 +143,20 @@ class Helper
      */
     private function getMetadata(string $fieldName): array
     {
-        return ($this->context instanceof Context) ? $this->context->getMetadata($fieldName) : [];
+        return $this->context instanceof Context
+            ? $this->context->getMetadata($fieldName)
+            : [];
+    }
+
+    /**
+     * @param string $name
+     * @param mixed ...$arguments
+     * @return AbstractElement
+     */
+    private function getElementByName(string $name, ...$arguments): AbstractElement
+    {
+        $elementClassName = '\Brnbio\LaravelForm\Form\Element\\' . ucfirst($name);
+
+        return new $elementClassName(...$arguments);
     }
 }
