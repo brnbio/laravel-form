@@ -59,6 +59,8 @@ return [
         \Brnbio\LaravelForm\Form\Element\FormEnd::class => '</form>',
         \Brnbio\LaravelForm\Form\Element\Label::class => '<label{{attrs}}>{{text}}</label>',
         \Brnbio\LaravelForm\Form\Element\Button::class => '<button{{attrs}}>{{text}}</button>',
+        \Brnbio\LaravelForm\Form\Element\Checkbox::class => '<input type="checkbox" name="{{name}}"{{attrs}}>',
+        \Brnbio\LaravelForm\Form\Element\Input::class => '<input type="{{type}}" name="{{name}}"{{attrs}} />',
     ],
 
 ];

@@ -62,6 +62,18 @@ class Helper
      * @param array $options
      * @return HtmlString
      */
+    public function checkbox(string $fieldName, array $options = []): HtmlString
+    {
+        return $this
+            ->getElementByName('checkbox', $fieldName, $options)
+            ->render();
+    }
+
+    /**
+     * @param string $fieldName
+     * @param array $options
+     * @return HtmlString
+     */
     public function control(string $fieldName, array $options = []): HtmlString
     {
         return $this
@@ -94,6 +106,29 @@ class Helper
 
         return $this
             ->getElementByName('formEnd')
+            ->render();
+    }
+
+    /**
+     * @param string $fieldName
+     * @param array $options
+     * @return HtmlString
+     */
+    public function hidden(string $fieldName, array $options = []): HtmlString
+    {
+        return $this->input('hidden', $fieldName, $options);
+    }
+
+    /**
+     * @param string $type
+     * @param string $fieldName
+     * @param array $options
+     * @return HtmlString
+     */
+    public function input(string $type, string $fieldName, array $options = []): HtmlString
+    {
+        return $this
+            ->getElementByName('input', $type, $fieldName, $options)
             ->render();
     }
 

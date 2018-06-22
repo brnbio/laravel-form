@@ -96,11 +96,12 @@ class Control extends AbstractElement
      */
     public function render(): HtmlString
     {
-        return $this->templater->formatTemplate($this->getTemplate(), [
-            'label' => $this->renderLabel($this->label),
-            'control' => null,
-            'attrs' => $this->templater->formatAttributes($this->getAttributes()),
-        ]);
+        return $this->templater
+            ->formatTemplate($this->getTemplate(), [
+                'label' => $this->renderLabel($this->label),
+                'control' => null,
+                'attrs' => $this->templater->formatAttributes($this->getAttributes()),
+            ]);
     }
 
     /**

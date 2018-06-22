@@ -24,6 +24,26 @@ use Illuminate\Support\HtmlString;
 abstract class AbstractElement
 {
     /**
+     * Attribute names
+     */
+    public const ATTRIBUTE_ACCESS_KEY = 'accesskey';
+    public const ATTRIBUTE_CLASS = 'class';
+    public const ATTRIBUTE_CONTENT_EDITABLE = 'contenteditable';
+    public const ATTRIBUTE_CONTEXT_MENU = 'contextmenu';
+    public const ATTRIBUTE_DIR = 'dir';
+    public const ATTRIBUTE_DRAGGABLE = 'draggable';
+    public const ATTRIBUTE_HIDDEN = 'hidden';
+    public const ATTRIBUTE_ID = 'id';
+    public const ATTRIBUTE_LANG = 'lang';
+    public const ATTRIBUTE_NAME = 'name';
+    public const ATTRIBUTE_SPELLCHECK = 'spellcheck';
+    public const ATTRIBUTE_STYLE = 'style';
+    public const ATTRIBUTE_TABINDEX = 'tabindex';
+    public const ATTRIBUTE_TYPE = 'type';
+    public const ATTRIBUTE_TITLE = 'title';
+    public const ATTRIBUTE_VALUE = 'value';
+
+    /**
      * @var mixed[]
      */
     protected $defaultOptions = [];
@@ -37,38 +57,38 @@ abstract class AbstractElement
      * @var string[]
      */
     protected $allowedAttributes = [
-        'accesskey',
-        'class',
-        'contenteditable',
-        'contextmenu',
-        'dir',
-        'draggable',
-        'hidden',
-        'id',
-        'lang',
-        'spellcheck',
-        'style',
-        'tabindex',
-        'title',
+        self::ATTRIBUTE_ACCESS_KEY,
+        self::ATTRIBUTE_CLASS,
+        self::ATTRIBUTE_CONTENT_EDITABLE,
+        self::ATTRIBUTE_CONTEXT_MENU,
+        self::ATTRIBUTE_DIR,
+        self::ATTRIBUTE_DRAGGABLE,
+        self::ATTRIBUTE_HIDDEN,
+        self::ATTRIBUTE_ID,
+        self::ATTRIBUTE_LANG,
+        self::ATTRIBUTE_SPELLCHECK,
+        self::ATTRIBUTE_STYLE,
+        self::ATTRIBUTE_TABINDEX,
+        self::ATTRIBUTE_TITLE,
     ];
 
     /**
      * @var mixed[]
      */
     protected $allowedAttributeValues = [
-        'contenteditable' => [
+        self::ATTRIBUTE_CONTENT_EDITABLE => [
             'true',
             'false',
         ],
-        'dir' => [
+        self::ATTRIBUTE_DIR => [
             'ltr',
             'rtl',
         ],
-        'draggable' => [
+        self::ATTRIBUTE_DRAGGABLE => [
             'true',
             'false',
         ],
-        'spellcheck' => [
+        self::ATTRIBUTE_SPELLCHECK => [
             'true',
             'false',
         ],
@@ -95,6 +115,9 @@ abstract class AbstractElement
         $this->addAdditionalAllowedAttributesValues();
     }
 
+    /**
+     * @return HtmlString
+     */
     abstract public function render(): HtmlString;
 
     /**
@@ -117,15 +140,16 @@ abstract class AbstractElement
      * @param mixed[] $options
      * @return mixed[]
      */
-    protected function validateAttributes(array $options = []): array
+    protected function validateAttributes(array $options = [], array $exclude = []): array
     {
         foreach ($options as $key => $value) {
+            // -- single word options like disabled or required
             if (is_numeric($key)) {
                 unset($options[$key]);
                 $key = $value;
                 $options[$key] = $value;
             }
-            if (! in_array($key, $this->allowedAttributes, true)) {
+            if (! in_array($key, $this->allowedAttributes, true) || in_array($key, $exclude)) {
                 unset($options[$key]);
             } else {
                 if ($this->validateAttributeValue($key, $options[$key]) === false) {
