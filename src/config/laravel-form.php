@@ -23,6 +23,9 @@ return [
     */
 
     'css' => [
+        'checkbox' => 'form-check-input',
+        'checkboxContainer' => 'form-check',
+        'checkboxLabel' => 'form-check-label',
         'error' => 'error',
         'input' => 'form-control',
         'inputContainer' => 'form-group',
@@ -54,13 +57,13 @@ return [
     */
 
     'templates' => [
-        \Brnbio\LaravelForm\Form\Element\Control::class => '<div{{attrs}}>{{label}}{{control}}</div>',
-        \Brnbio\LaravelForm\Form\Element\FormStart::class => '<form{{attrs}}>{{csrf}}',
-        \Brnbio\LaravelForm\Form\Element\FormEnd::class => '</form>',
-        \Brnbio\LaravelForm\Form\Element\Label::class => '<label{{attrs}}>{{text}}</label>',
         \Brnbio\LaravelForm\Form\Element\Button::class => '<button{{attrs}}>{{text}}</button>',
-        \Brnbio\LaravelForm\Form\Element\Checkbox::class => '<input type="checkbox" name="{{name}}"{{attrs}}>',
+        \Brnbio\LaravelForm\Form\Element\Checkbox::class => '<div{{attrs}}>{{label}}</div>',
+        \Brnbio\LaravelForm\Form\Element\Control::class => '<div{{attrs}}>{{label}}{{control}}</div>',
+        \Brnbio\LaravelForm\Form\Element\FormEnd::class => '</form>',
+        \Brnbio\LaravelForm\Form\Element\FormStart::class => '<form{{attrs}}>{{csrf}}',
         \Brnbio\LaravelForm\Form\Element\Input::class => '<input type="{{type}}" name="{{name}}"{{attrs}} />',
+        \Brnbio\LaravelForm\Form\Element\Label::class => '<label{{attrs}}>{{text}}</label>',
     ],
 
 ];

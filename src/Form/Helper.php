@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace Brnbio\LaravelForm\Form;
 
+use Brnbio\LaravelForm\Form\Element\Button;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\HtmlString;
 
@@ -59,13 +60,14 @@ class Helper
 
     /**
      * @param string $fieldName
+     * @param string $label
      * @param array $options
      * @return HtmlString
      */
-    public function checkbox(string $fieldName, array $options = []): HtmlString
+    public function checkbox(string $fieldName, string $label, array $options = []): HtmlString
     {
         return $this
-            ->getElementByName('checkbox', $fieldName, $options)
+            ->getElementByName('checkbox', $fieldName, $label, $options)
             ->render();
     }
 
@@ -151,7 +153,7 @@ class Helper
      */
     public function reset(string $text, array $options = []): HtmlString
     {
-        $options['type'] = 'reset';
+        $options[Button::ATTRIBUTE_TYPE] = Button::BUTTON_TYPE_RESET;
 
         return $this
             ->getElementByName('button', $text, $options)
@@ -165,7 +167,7 @@ class Helper
      */
     public function submit(string $text, array $options = []): HtmlString
     {
-        $options['type'] = 'submit';
+        $options[Button::ATTRIBUTE_TYPE] = Button::BUTTON_TYPE_SUBMIT;
 
         return $this
             ->getElementByName('button', $text, $options)

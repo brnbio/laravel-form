@@ -26,19 +26,30 @@ abstract class AbstractElement
     /**
      * Attribute names
      */
+    public const ATTRIBUTE_ACCEPT_CHARSET = 'accept-charset';
     public const ATTRIBUTE_ACCESS_KEY = 'accesskey';
+    public const ATTRIBUTE_ACTION = 'action';
+    public const ATTRIBUTE_AUTOCOMPLETE = 'autocomplete';
+    public const ATTRIBUTE_AUTOFOCUS = 'autofocus';
     public const ATTRIBUTE_CLASS = 'class';
     public const ATTRIBUTE_CONTENT_EDITABLE = 'contenteditable';
     public const ATTRIBUTE_CONTEXT_MENU = 'contextmenu';
     public const ATTRIBUTE_DIR = 'dir';
+    public const ATTRIBUTE_DISABLED = 'disabled';
     public const ATTRIBUTE_DRAGGABLE = 'draggable';
+    public const ATTRIBUTE_ENCTYPE = 'enctype';
+    public const ATTRIBUTE_FOR = 'for';
+    public const ATTRIBUTE_FORM = 'form';
     public const ATTRIBUTE_HIDDEN = 'hidden';
     public const ATTRIBUTE_ID = 'id';
     public const ATTRIBUTE_LANG = 'lang';
+    public const ATTRIBUTE_METHOD = 'method';
     public const ATTRIBUTE_NAME = 'name';
+    public const ATTRIBUTE_NO_VALIDATE = 'novalidate';
     public const ATTRIBUTE_SPELLCHECK = 'spellcheck';
     public const ATTRIBUTE_STYLE = 'style';
     public const ATTRIBUTE_TABINDEX = 'tabindex';
+    public const ATTRIBUTE_TARGET = 'target';
     public const ATTRIBUTE_TYPE = 'type';
     public const ATTRIBUTE_TITLE = 'title';
     public const ATTRIBUTE_VALUE = 'value';

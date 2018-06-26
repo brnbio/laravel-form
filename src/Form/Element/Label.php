@@ -5,14 +5,6 @@
  *
  * Caption for a form control.
  *
- * Permitted attributes:
- * - common attributes
- * - for
- * - form
- *
- * Tag omission:
- * A label element must have both a start tag and an end tag.
- *
  * @copyright   Copyright (c) brainbo UG (haftungsbeschränkt) (http://brnb.io)
  * @author      Frank Heider <heider@brnb.io>
  * @since       2018-06-18
@@ -62,17 +54,21 @@ class Label extends AbstractElement
      */
     public function render(): HtmlString
     {
-        return $this->templater->formatTemplate($this->getTemplate(), [
-            'text' => $this->text,
-            'attrs' => $this->templater->formatAttributes($this->attributes),
-        ]);
+        return $this->templater
+            ->formatTemplate($this->getTemplate(), [
+                'text' => $this->text,
+                'attrs' => $this->templater->formatAttributes($this->attributes),
+            ]);
     }
 
+    /**
+     * @param array $attributes
+     */
     protected function addAdditionalAllowedAttributes(array $attributes = []): void
     {
         parent::addAdditionalAllowedAttributes([
-            'for',
-            'form',
+            self::ATTRIBUTE_FOR,
+            self::ATTRIBUTE_FORM,
         ]);
     }
 }

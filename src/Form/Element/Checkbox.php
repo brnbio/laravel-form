@@ -3,9 +3,13 @@
 /**
  * Checkbox.php
  *
- * @copyright   OEMUS MEDIA AG (https://oemus.com)
- * @author      Frank Heider <f.heider@oemus-media.de>
- * @since       22.06.2018
+ * The input element with a type attribute whose value is "checkbox" represents a state or option that can be toggled.
+ * The checkbox form helper element contain a wrapper.
+ *
+ * @copyright   Copyright (c) brainbo UG (haftungsbeschränkt) (http://brnb.io)
+ * @author      Frank Heider <heider@brnb.io>
+ * @since       2018-06-22
+ * @link        https://www.w3.org/TR/2010/WD-html-markup-20100624/input.checkbox.html
  */
 
 declare(strict_types=1);
@@ -13,6 +17,7 @@ declare(strict_types=1);
 namespace Brnbio\LaravelForm\Form\Element;
 
 use Brnbio\LaravelForm\Form\AbstractElement;
+use Brnbio\LaravelForm\Form\Helper;
 use Illuminate\Support\HtmlString;
 
 /**
@@ -23,22 +28,30 @@ use Illuminate\Support\HtmlString;
  */
 class Checkbox extends AbstractElement
 {
+    public const CHECKBOX_ATTRIBUTE_CONTAINER = '_container';
+    public const CHECKBOX_ATTRIBUTE_LABEL = '_label';
+
     /**
      * @var array
      */
     protected $defaultOptions = [
-        'value' => 1,
+        self::ATTRIBUTE_VALUE => 1,
     ];
 
     /**
      * @var string
      */
-    protected $defaultTemplate = '<input type="checkbox" name="{{name}}"{{attrs}}>';
+    protected $defaultTemplate = '<div{{attrs}}>{{label}}</div>';
 
     /**
      * @var string
      */
     protected $fieldName;
+
+    /**
+     * @var string
+     */
+    protected $label;
 
     /**
      * Insert a hidden input field to definitly set a value to this field
@@ -52,7 +65,7 @@ class Checkbox extends AbstractElement
      * @param string $fieldName
      * @param array $options
      */
-    public function __construct(string $fieldName, array $options = [])
+    public function __construct(string $fieldName, string $label, array $options = [])
     {
         parent::__construct();
 
@@ -60,11 +73,19 @@ class Checkbox extends AbstractElement
             $this->hiddenField = (bool)$options['hiddenField'];
         }
 
+        if (! isset($options[self::ATTRIBUTE_CLASS])) {
+            $options[self::ATTRIBUTE_CLASS] = config('laravel-form.css.checkbox');
+        }
+        if (! isset($options[self::CHECKBOX_ATTRIBUTE_CONTAINER][self::ATTRIBUTE_CLASS])) {
+            $options[self::CHECKBOX_ATTRIBUTE_CONTAINER][self::ATTRIBUTE_CLASS] = config('laravel-form.css.checkboxContainer');
+        }
+        if (! isset($options[self::CHECKBOX_ATTRIBUTE_LABEL][self::ATTRIBUTE_CLASS])) {
+            $options[self::CHECKBOX_ATTRIBUTE_LABEL][self::ATTRIBUTE_CLASS] = config('laravel-form.css.checkboxLabel');
+        }
+
         $this->fieldName = $fieldName;
-        $this->attributes = $this->validateAttributes($options + $this->defaultOptions, [
-            self::ATTRIBUTE_NAME,
-            self::ATTRIBUTE_TYPE,
-        ]);
+        $this->label = $label;
+        $this->attributes = $options + $this->defaultOptions;
     }
 
     /**
@@ -72,15 +93,20 @@ class Checkbox extends AbstractElement
      */
     public function render(): HtmlString
     {
-        $hiddenField = '';
+        $output = '';
         if ($this->hiddenField) {
-            $hiddenField = (new Input('hidden', $this->fieldName, ['value' => 0]))->render();
+            $output = Helper::getInstance()
+                ->hidden($this->fieldName, [self::ATTRIBUTE_VALUE => 0]);
         }
+        $output .= Helper::getInstance()
+            ->input(Input::INPUT_TYPE_CHECKBOX, $this->fieldName, $this->attributes);
+        $output .= $this->label;
 
-        return $this->templater->formatTemplate($hiddenField . $this->getTemplate(), [
-            'name' => $this->fieldName,
-            'attrs' => $this->templater->formatAttributes($this->attributes),
-        ]);
+        return $this->templater
+            ->formatTemplate($this->getTemplate(), [
+                'attrs' => $this->templater->formatAttributes($this->attributes[self::CHECKBOX_ATTRIBUTE_CONTAINER]),
+                'label' => Helper::getInstance()->label($output, $this->attributes[self::CHECKBOX_ATTRIBUTE_LABEL]),
+            ]);
     }
 
     /**
@@ -89,7 +115,8 @@ class Checkbox extends AbstractElement
     protected function addAdditionalAllowedAttributes(array $attributes = []): void
     {
         parent::addAdditionalAllowedAttributes([
-            self::ATTRIBUTE_VALUE,
+            self::CHECKBOX_ATTRIBUTE_CONTAINER,
+            self::CHECKBOX_ATTRIBUTE_LABEL,
         ]);
     }
 }

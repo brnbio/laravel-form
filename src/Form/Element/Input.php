@@ -3,9 +3,12 @@
 /**
  * Input.php
  *
- * @copyright   OEMUS MEDIA AG (https://oemus.com)
- * @author      Frank Heider <f.heider@oemus-media.de>
- * @since       22.06.2018
+ * The input element represents a one-line plain text edit control for the input element’s value.
+ *
+ * @copyright   Copyright (c) brainbo UG (haftungsbeschränkt) (http://brnb.io)
+ * @author      Frank Heider <heider@brnb.io>
+ * @since       2018-06-22
+ * @link        https://www.w3.org/TR/2010/WD-html-markup-20100624/input.html
  */
 
 declare(strict_types=1);
@@ -23,6 +26,23 @@ use Illuminate\Support\HtmlString;
  */
 class Input extends AbstractElement
 {
+    public const INPUT_TYPE_CHECKBOX = 'checkbox';
+    public const INPUT_TYPE_EMAIL = 'email';
+    public const INPUT_TYPE_FILE = 'file';
+    public const INPUT_TYPE_HIDDEN = 'hidden';
+    public const INPUT_TYPE_NUMBER = 'number';
+    public const INPUT_TYPE_PASSWORD = 'password';
+    public const INPUT_TYPE_RADIO = 'radio';
+    public const INPUT_TYPE_TEXT = 'text';
+    public const INPUT_TYPE_URL = 'url';
+
+    /**
+     * @var mixed[]
+     */
+    protected $defaultOptions = [
+        self::ATTRIBUTE_TYPE => self::INPUT_TYPE_TEXT,
+    ];
+
     /**
      * @var string
      */

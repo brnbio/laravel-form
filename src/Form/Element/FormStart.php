@@ -5,21 +5,6 @@
  *
  * The form element represents a user-submittable form.
  *
- * Permitted attributes
- * - common attributes
- * - action
- * - method
- * - enctype
- * - name
- * - accept-charset
- * - novalidate
- * - target
- * - autocomplete
- *
- * Tag omission:
- * A form element must have both a start tag and an end tag.
- * (end tag > Brnbio\LaravelForm\Form\Element\FormEnd)
- *
  * @copyright   Copyright (c) brainbo UG (haftungsbeschränkt) (http://brnb.io)
  * @author      Frank Heider <heider@brnb.io>
  * @since       2018-06-18
@@ -41,12 +26,21 @@ use Illuminate\Support\HtmlString;
  */
 class FormStart extends AbstractElement
 {
+    public const FORM_METHOD_GET = 'get';
+    public const FORM_METHOD_POST = 'post';
+    public const FORM_METHOD_PUT = 'put';
+    public const FORM_METHOD_DELETE = 'delete';
+
+    public const FORM_ENCTYPE_DEFAULT = 'application/x-www-form-urlencoded';
+    public const FORM_ENCTYPE_FILE = 'multipart/form-data';
+    public const FORM_ENCTYPE_PLAIN = 'text/plain';
+
     /**
      * @var array
      */
     protected $defaultOptions = [
-        'method' => 'post',
-        'accept-charset' => 'utf-8',
+        self::ATTRIBUTE_METHOD => self::FORM_METHOD_POST,
+        self::ATTRIBUTE_ACCEPT_CHARSET => 'utf-8',
     ];
 
     /**
@@ -63,8 +57,8 @@ class FormStart extends AbstractElement
         parent::__construct();
         $options += $this->defaultOptions;
 
-        if (isset($options['type']) && $options['type'] === 'file') {
-            $options['enctype'] = 'multipart/form-data';
+        if (isset($options[self::ATTRIBUTE_TYPE]) && $options[self::ATTRIBUTE_TYPE] === 'file') {
+            $options[self::ATTRIBUTE_ENCTYPE] = self::FORM_ENCTYPE_FILE;
         }
 
         $this->attributes = $this->validateAttributes($options);
@@ -75,22 +69,23 @@ class FormStart extends AbstractElement
      */
     public function render(): HtmlString
     {
-        return $this->templater->formatTemplate($this->getTemplate(), [
-            'attrs' => $this->templater->formatAttributes($this->attributes),
-            'csrf' => csrf_field(),
-        ]);
+        return $this->templater
+            ->formatTemplate($this->getTemplate(), [
+                'attrs' => $this->templater->formatAttributes($this->attributes),
+                'csrf' => csrf_field(),
+            ]);
     }
 
     protected function addAdditionalAllowedAttributes(array $attributes = []): void
     {
         parent::addAdditionalAllowedAttributes([
-            'accept-charset',
-            'action',
-            'autocomplete',
-            'enctype',
-            'method',
-            'novalidate',
-            'target',
+            self::ATTRIBUTE_ACCEPT_CHARSET,
+            self::ATTRIBUTE_ACTION,
+            self::ATTRIBUTE_AUTOCOMPLETE,
+            self::ATTRIBUTE_ENCTYPE,
+            self::ATTRIBUTE_METHOD,
+            self::ATTRIBUTE_NO_VALIDATE,
+            self::ATTRIBUTE_TARGET,
         ]);
     }
 
@@ -100,22 +95,22 @@ class FormStart extends AbstractElement
     protected function addAdditionalAllowedAttributesValues(array $attributesValues = []): void
     {
         parent::addAdditionalAllowedAttributesValues([
-            'autocomplete' => [
+            self::ATTRIBUTE_AUTOCOMPLETE => [
                 'on',
                 'off',
             ],
-            'enctype' => [
-                'application/x-www-form-urlencoded',
-                'multipart/form-data',
-                'text/plain',
+            self::ATTRIBUTE_ENCTYPE => [
+                self::FORM_ENCTYPE_DEFAULT,
+                self::FORM_ENCTYPE_FILE,
+                self::FORM_ENCTYPE_PLAIN,
             ],
-            'method' => [
-                'get',
-                'post',
-                'put',
-                'delete',
+            self::ATTRIBUTE_METHOD => [
+                self::FORM_METHOD_GET,
+                self::FORM_METHOD_POST,
+                self::FORM_METHOD_PUT,
+                self::FORM_METHOD_DELETE,
             ],
-            'target' => [
+            self::ATTRIBUTE_TARGET => [
                 '_blank',
                 '_self',
                 '_parent',

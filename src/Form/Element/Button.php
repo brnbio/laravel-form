@@ -5,18 +5,6 @@
  *
  * button with no additional semantics
  *
- * Permitted attributes:
- * - common attributes
- * - name
- * - disabled
- * - form
- * - type
- * - value
- * - autofocus
- *
- * Tag omission:
- * A button element must have both a start tag and an end tag.
- *
  * @copyright   Copyright (c) brainbo UG (haftungsbeschränkt) (http://brnb.io)
  * @author      Frank Heider <heider@brnb.io>
  * @since       2018-06-19
@@ -40,11 +28,15 @@ use Illuminate\Support\HtmlString;
  */
 class Button extends AbstractElement
 {
+    public const BUTTON_TYPE_BUTTON = 'button';
+    public const BUTTON_TYPE_SUBMIT = 'submit';
+    public const BUTTON_TYPE_RESET = 'reset';
+
     /**
      * @var mixed[]
      */
     protected $defaultOptions = [
-        'type' => 'button',
+        self::ATTRIBUTE_TYPE => self::BUTTON_TYPE_BUTTON,
     ];
 
     /**
@@ -66,9 +58,9 @@ class Button extends AbstractElement
     public function __construct(string $text, array $options = [])
     {
         parent::__construct();
-        $options += $this->defaultOptions;
+
         $this->text = trim($text);
-        $this->attributes = $this->validateAttributes($options);
+        $this->attributes = $this->validateAttributes($options + $this->defaultOptions);
     }
 
     /**
@@ -76,31 +68,38 @@ class Button extends AbstractElement
      */
     public function render(): HtmlString
     {
-        return $this->templater->formatTemplate($this->getTemplate(), [
-            'text' => $this->text,
-            'attrs' => $this->templater->formatAttributes($this->attributes),
-        ]);
+        return $this->templater
+            ->formatTemplate($this->getTemplate(), [
+                'text' => $this->text,
+                'attrs' => $this->templater->formatAttributes($this->attributes),
+            ]);
     }
 
+    /**
+     * @param array $attributes
+     */
     protected function addAdditionalAllowedAttributes(array $attributes = []): void
     {
         parent::addAdditionalAllowedAttributes([
-            'name',
-            'disabled',
-            'form',
-            'type',
-            'value',
-            'autofocus',
+            self::ATTRIBUTE_AUTOFOCUS,
+            self::ATTRIBUTE_DISABLED,
+            self::ATTRIBUTE_FORM,
+            self::ATTRIBUTE_NAME,
+            self::ATTRIBUTE_TYPE,
+            self::ATTRIBUTE_VALUE,
         ]);
     }
 
+    /**
+     * @param array $attributesValues
+     */
     protected function addAdditionalAllowedAttributesValues(array $attributesValues = []): void
     {
         parent::addAdditionalAllowedAttributesValues([
-            'type' => [
-                'button',
-                'reset',
-                'submit',
+            self::ATTRIBUTE_TYPE => [
+                self::BUTTON_TYPE_BUTTON,
+                self::BUTTON_TYPE_RESET,
+                self::BUTTON_TYPE_SUBMIT,
             ],
         ]);
     }

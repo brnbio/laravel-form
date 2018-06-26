@@ -5,12 +5,6 @@
  *
  * A special div container which include a label element and an input element.
  *
- * Permitted attributes:
- * - common attributes
- *
- * Tag omission:
- * A div element must have both a start tag and an end tag.
- *
  * @copyright   Copyright (c) brainbo UG (haftungsbeschränkt) (http://brnb.io)
  * @author      Frank Heider <heider@brnb.io>
  * @since       2018-06-18
@@ -33,6 +27,9 @@ use Illuminate\Support\Str;
  */
 class Control extends AbstractElement
 {
+
+    public const CONTROL_ATTRIBUTE_LABEL = 'label';
+
     /**
      * @var string
      */
@@ -71,22 +68,23 @@ class Control extends AbstractElement
 
         $options += $this->defaultOptions;
 
-        if (! isset($options['class'])) {
-            $options['class'] = config('laravel-form.css.inputContainer');
+        if (! isset($options[self::ATTRIBUTE_CLASS])) {
+            $options[self::ATTRIBUTE_CLASS] = config('laravel-form.css.inputContainer');
             if (! empty($metadata['type'])) {
-                $options['class'] .= ' ' . $metadata['type'];
+                $options[self::ATTRIBUTE_CLASS] .= ' ' . $metadata['type'];
             }
             if (! empty($metadata['required'])) {
-                $options['class'] .= ' ' . config('laravel-form.css.required');
+                $options[self::ATTRIBUTE_CLASS] .= ' ' . config('laravel-form.css.required');
             }
         }
 
-        if (! isset($options['label'])) {
-            $options['label'] = Str::camel($fieldName);
+        if (! isset($options[self::CONTROL_ATTRIBUTE_LABEL])) {
+            $this->label = Str::camel($fieldName);
+        } else {
+            $this->label = $options[self::CONTROL_ATTRIBUTE_LABEL];
         }
 
         $this->fieldName = $fieldName;
-        $this->label = $options['label'];
         $this->metadata = $metadata;
         $this->attributes = $this->validateAttributes($options);
     }

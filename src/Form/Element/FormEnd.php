@@ -32,15 +32,11 @@ class FormEnd extends AbstractElement
     protected $defaultTemplate = '</form>';
 
     /**
-     * @var array
-     */
-    protected $allowedAttributes = [];
-
-    /**
      * @return HtmlString
      */
     public function render(): HtmlString
     {
-        return $this->templater->formatTemplate($this->getTemplate());
+        return $this->templater
+            ->formatTemplate($this->getTemplate());
     }
 }
