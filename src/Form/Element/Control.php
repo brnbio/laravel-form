@@ -111,8 +111,8 @@ class Control extends AbstractElement
         if ($label === null) {
             return new HtmlString('');
         }
+        $label = new Label($label, ['for' => $this->fieldName]);
 
-        return (new Label($label, ['for' => $this->fieldName]))
-            ->render();
+        return $label->render();
     }
 }

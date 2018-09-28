@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace Brnbio\LaravelForm\Form;
 
-use Brnbio\LaravelForm\Form\Element\Button;
+use Brnbio\LaravelForm\Form\Element as Element;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\HtmlString;
 
@@ -53,8 +53,7 @@ class Helper
      */
     public function button(string $text, array $options = []): HtmlString
     {
-        return $this
-            ->getElementByName('button', $text, $options)
+        return (new Element\Button($text, $options))
             ->render();
     }
 
@@ -66,8 +65,7 @@ class Helper
      */
     public function checkbox(string $fieldName, string $label, array $options = []): HtmlString
     {
-        return $this
-            ->getElementByName('checkbox', $fieldName, $label, $options)
+        return (new Element\Checkbox($fieldName, $label, $options))
             ->render();
     }
 
@@ -78,9 +76,10 @@ class Helper
      */
     public function control(string $fieldName, array $options = []): HtmlString
     {
-        return $this
+        die('TODO');
+        /*return $this
             ->getElementByName('control', $fieldName, $options, $this->getMetadata($fieldName))
-            ->render();
+            ->render();*/
     }
 
     /**
@@ -94,8 +93,7 @@ class Helper
             $this->context = new Context($context);
         }
 
-        return $this
-            ->getElementByName('formStart', $options)
+        return (new Element\FormStart($options))
             ->render();
     }
 
@@ -106,8 +104,7 @@ class Helper
     {
         $this->context = null;
 
-        return $this
-            ->getElementByName('formEnd')
+        return (new Element\FormEnd())
             ->render();
     }
 
@@ -118,7 +115,13 @@ class Helper
      */
     public function hidden(string $fieldName, array $options = []): HtmlString
     {
-        return $this->input('hidden', $fieldName, $options);
+        $element = new Element\Input(
+            Element\Input::INPUT_TYPE_HIDDEN,
+            $fieldName,
+            $options
+        );
+
+        return $element->render();
     }
 
     /**
@@ -183,17 +186,5 @@ class Helper
         return $this->context instanceof Context
             ? $this->context->getMetadata($fieldName)
             : [];
-    }
-
-    /**
-     * @param string $name
-     * @param mixed ...$arguments
-     * @return AbstractElement
-     */
-    private function getElementByName(string $name, ...$arguments): AbstractElement
-    {
-        $elementClassName = '\Brnbio\LaravelForm\Form\Element\\' . ucfirst($name);
-
-        return new $elementClassName(...$arguments);
     }
 }
