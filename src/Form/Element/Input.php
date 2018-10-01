@@ -46,7 +46,7 @@ class Input extends AbstractElement
     /**
      * @var string
      */
-    protected $defaultTemplate = '<input type="{{type}}" name="{{name}}"{{attrs}} />';
+    protected $defaultTemplate = '<input name="{{name}}"{{attrs}} />';
 
     /**
      * @var string
@@ -60,18 +60,20 @@ class Input extends AbstractElement
 
     /**
      * Input constructor.
-     * @param string $type
+     *
      * @param string $fieldName
      * @param array $options
      */
-    public function __construct(string $type, string $fieldName, array $options = [])
+    public function __construct(string $fieldName, array $options = [])
     {
         parent::__construct();
 
-        $this->type = $type;
+        if (! isset($options[self::ATTRIBUTE_CLASS])) {
+            $options[self::ATTRIBUTE_CLASS] = config('laravel-form.css.input');
+        }
+
         $this->fieldName = $fieldName;
         $this->attributes = $this->validateAttributes($options + $this->defaultOptions, [
-            self::ATTRIBUTE_TYPE,
             self::ATTRIBUTE_NAME,
         ]);
     }
@@ -83,7 +85,6 @@ class Input extends AbstractElement
     {
         return $this->templater
             ->formatTemplate($this->getTemplate(), [
-                'type' => $this->type,
                 'name' => $this->fieldName,
                 'attrs' => $this->templater->formatAttributes($this->attributes),
             ]);

@@ -47,42 +47,6 @@ class Helper
     }
 
     /**
-     * @param string $text
-     * @param array $options
-     * @return HtmlString
-     */
-    public function button(string $text, array $options = []): HtmlString
-    {
-        return (new Element\Button($text, $options))
-            ->render();
-    }
-
-    /**
-     * @param string $fieldName
-     * @param string $label
-     * @param array $options
-     * @return HtmlString
-     */
-    public function checkbox(string $fieldName, string $label, array $options = []): HtmlString
-    {
-        return (new Element\Checkbox($fieldName, $label, $options))
-            ->render();
-    }
-
-    /**
-     * @param string $fieldName
-     * @param array $options
-     * @return HtmlString
-     */
-    public function control(string $fieldName, array $options = []): HtmlString
-    {
-        die('TODO');
-        /*return $this
-            ->getElementByName('control', $fieldName, $options, $this->getMetadata($fieldName))
-            ->render();*/
-    }
-
-    /**
      * @param Model|null $context
      * @param array $options
      * @return HtmlString
@@ -110,31 +74,16 @@ class Helper
 
     /**
      * @param string $fieldName
-     * @param array $options
+     * @param array  $options
+     *
      * @return HtmlString
      */
-    public function hidden(string $fieldName, array $options = []): HtmlString
+    public function control(string $fieldName, array $options = []): HtmlString
     {
-        $element = new Element\Input(
-            Element\Input::INPUT_TYPE_HIDDEN,
-            $fieldName,
-            $options
-        );
-
-        return $element->render();
-    }
-
-    /**
-     * @param string $type
-     * @param string $fieldName
-     * @param array $options
-     * @return HtmlString
-     */
-    public function input(string $type, string $fieldName, array $options = []): HtmlString
-    {
-        return $this
-            ->getElementByName('input', $type, $fieldName, $options)
-            ->render();
+        if ($this->getContext() === null) {
+            throw new \Exception('No context set in form helper.');
+        }
+        $type = $this->getControlType($fieldName);
     }
 
     /**
@@ -144,8 +93,90 @@ class Helper
      */
     public function label(string $text, array $options = []): HtmlString
     {
-        return $this
-            ->getElementByName('label', $text, $options)
+        return (new Element\Label($text, $options))
+            ->render();
+    }
+
+    /**
+     * @param string $type
+     * @param string $fieldName
+     * @param array  $options
+     *
+     * @return HtmlString
+     */
+    public function input(string $type, string $fieldName, array $options = []): HtmlString
+    {
+        $options[Element\Input::ATTRIBUTE_TYPE] = $type;
+
+        return (new Element\Input($fieldName, $options))
+            ->render();
+    }
+
+    /**
+     * @param string $fieldName
+     * @param array $options
+     * @return HtmlString
+     */
+    public function text(string $fieldName, array $options = []): HtmlString
+    {
+        if (! isset($options[Element\Input::ATTRIBUTE_VALUE])) {
+            $options[Element\Input::ATTRIBUTE_VALUE] = old($fieldName, e($this->getValue($fieldName)));
+        }
+
+        return $this->input(
+            Element\Input::INPUT_TYPE_TEXT,
+            $fieldName,
+            $options
+        );
+    }
+
+    /**
+     * @param string $fieldName
+     * @param array $options
+     * @return HtmlString
+     */
+    public function hidden(string $fieldName, array $options = []): HtmlString
+    {
+        return $this->input(
+            Element\Input::INPUT_TYPE_HIDDEN,
+            $fieldName,
+            $options
+        );
+    }
+
+    /**
+     * @param string $fieldName
+     * @param array $options
+     * @return HtmlString
+     */
+    public function email(string $fieldName, array $options = []): HtmlString
+    {
+        return $this->input(
+            Element\Input::INPUT_TYPE_EMAIL,
+            $fieldName,
+            $options
+        );
+    }
+
+    /**
+     * @param string $fieldName
+     * @param array $options
+     * @return HtmlString
+     */
+    public function checkbox(string $fieldName, array $options = []): HtmlString
+    {
+        return (new Element\Checkbox($fieldName, $options))
+            ->render();
+    }
+
+    /**
+     * @param string $text
+     * @param array $options
+     * @return HtmlString
+     */
+    public function button(string $text, array $options = []): HtmlString
+    {
+        return (new Element\Button($text, $options))
             ->render();
     }
 
@@ -156,11 +187,9 @@ class Helper
      */
     public function reset(string $text, array $options = []): HtmlString
     {
-        $options[Button::ATTRIBUTE_TYPE] = Button::BUTTON_TYPE_RESET;
+        $options[Element\Button::ATTRIBUTE_TYPE] = Element\Button::BUTTON_TYPE_RESET;
 
-        return $this
-            ->getElementByName('button', $text, $options)
-            ->render();
+        return $this->button($text, $options);
     }
 
     /**
@@ -170,11 +199,17 @@ class Helper
      */
     public function submit(string $text, array $options = []): HtmlString
     {
-        $options[Button::ATTRIBUTE_TYPE] = Button::BUTTON_TYPE_SUBMIT;
+        $options[Element\Button::ATTRIBUTE_TYPE] = Element\Button::BUTTON_TYPE_SUBMIT;
 
-        return $this
-            ->getElementByName('button', $text, $options)
-            ->render();
+        return $this->button($text, $options);
+    }
+
+    /**
+     * @return Context|null
+     */
+    protected function getContext(): ?Context
+    {
+        return $this->context;
     }
 
     /**
@@ -183,8 +218,38 @@ class Helper
      */
     private function getMetadata(string $fieldName): array
     {
-        return $this->context instanceof Context
-            ? $this->context->getMetadata($fieldName)
-            : [];
+        if ($this->getContext()) {
+            return $this->getContext()->getMetadata($fieldName);
+        }
+
+        return [];
+    }
+
+    /**
+     * @param string $fieldName
+     *
+     * @return string|null
+     */
+    private function getValue(string $fieldName): ?string
+    {
+        if ($this->getContext()) {
+            return $this->getContext()
+                ->getEntity()
+                ->getAttribute($fieldName);
+        }
+
+        return null;
+    }
+
+    /**
+     * @param string $fieldName
+     *
+     * @return string
+     */
+    private function getControlType(string $fieldName): string
+    {
+        $type = $this->getMetadata($fieldName);
+
+        dd($fieldName, $type);
     }
 }

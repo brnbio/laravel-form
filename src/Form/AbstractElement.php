@@ -144,7 +144,7 @@ abstract class AbstractElement
      */
     public function getTemplate(): string
     {
-        return config('laravel-form.templates.' . static::class) ?: $this->defaultTemplate;
+        return (string)config('laravel-form.templates.' . static::class) ?: $this->defaultTemplate;
     }
 
     /**

@@ -28,9 +28,6 @@ use Illuminate\Support\HtmlString;
  */
 class Checkbox extends AbstractElement
 {
-    public const CHECKBOX_ATTRIBUTE_CONTAINER = '_container';
-    public const CHECKBOX_ATTRIBUTE_LABEL = '_label';
-
     /**
      * @var array
      */
@@ -41,17 +38,12 @@ class Checkbox extends AbstractElement
     /**
      * @var string
      */
-    protected $defaultTemplate = '<div{{attrs}}>{{label}}</div>';
+    protected $defaultTemplate = '{{hiddenField}}<input type="checkbox" name="{{name}}"{{attrs}}/>';
 
     /**
      * @var string
      */
     protected $fieldName;
-
-    /**
-     * @var string
-     */
-    protected $label;
 
     /**
      * Insert a hidden input field to definitly set a value to this field
@@ -65,26 +57,20 @@ class Checkbox extends AbstractElement
      * @param string $fieldName
      * @param array $options
      */
-    public function __construct(string $fieldName, string $label, array $options = [])
+    public function __construct(string $fieldName, array $options = [])
     {
         parent::__construct();
 
         if (isset($options['hiddenField'])) {
             $this->hiddenField = (bool)$options['hiddenField'];
+            unset($options['hiddenField']);
         }
 
         if (! isset($options[self::ATTRIBUTE_CLASS])) {
             $options[self::ATTRIBUTE_CLASS] = config('laravel-form.css.checkbox');
         }
-        if (! isset($options[self::CHECKBOX_ATTRIBUTE_CONTAINER][self::ATTRIBUTE_CLASS])) {
-            $options[self::CHECKBOX_ATTRIBUTE_CONTAINER][self::ATTRIBUTE_CLASS] = config('laravel-form.css.checkboxContainer');
-        }
-        if (! isset($options[self::CHECKBOX_ATTRIBUTE_LABEL][self::ATTRIBUTE_CLASS])) {
-            $options[self::CHECKBOX_ATTRIBUTE_LABEL][self::ATTRIBUTE_CLASS] = config('laravel-form.css.checkboxLabel');
-        }
 
         $this->fieldName = $fieldName;
-        $this->label = $label;
         $this->attributes = $options + $this->defaultOptions;
     }
 
@@ -93,19 +79,26 @@ class Checkbox extends AbstractElement
      */
     public function render(): HtmlString
     {
-        $output = '';
+        // -- add hidden field with value 0 to force sending the given field to request
+        $hiddenField = null;
         if ($this->hiddenField) {
-            $output = Helper::getInstance()
-                ->hidden($this->fieldName, [self::ATTRIBUTE_VALUE => 0]);
+            $hiddenField = new Input(
+                $this->fieldName,
+                [
+                    self::ATTRIBUTE_TYPE => Input::INPUT_TYPE_HIDDEN,
+                    self::ATTRIBUTE_VALUE => 0,
+                ]
+            );
         }
-        $output .= Helper::getInstance()
-            ->input(Input::INPUT_TYPE_CHECKBOX, $this->fieldName, $this->attributes);
-        $output .= $this->label;
 
         return $this->templater
             ->formatTemplate($this->getTemplate(), [
-                'attrs' => $this->templater->formatAttributes($this->attributes[self::CHECKBOX_ATTRIBUTE_CONTAINER]),
-                'label' => Helper::getInstance()->label($output, $this->attributes[self::CHECKBOX_ATTRIBUTE_LABEL]),
+                'hiddenField' => $hiddenField ? $hiddenField->render() : '',
+                'attrs' => $this->templater->formatAttributes($this->attributes, [
+                    self::ATTRIBUTE_NAME,
+                    self::ATTRIBUTE_TYPE,
+                ]),
+                'name' => $this->fieldName,
             ]);
     }
 
@@ -115,8 +108,7 @@ class Checkbox extends AbstractElement
     protected function addAdditionalAllowedAttributes(array $attributes = []): void
     {
         parent::addAdditionalAllowedAttributes([
-            self::CHECKBOX_ATTRIBUTE_CONTAINER,
-            self::CHECKBOX_ATTRIBUTE_LABEL,
+            self::ATTRIBUTE_VALUE,
         ]);
     }
 }

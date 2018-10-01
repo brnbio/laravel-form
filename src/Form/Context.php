@@ -58,6 +58,14 @@ class Context
     }
 
     /**
+     * @return Model
+     */
+    public function getEntity(): Model
+    {
+        return $this->entity;
+    }
+
+    /**
      * @param string $tableName
      * @return array
      */
