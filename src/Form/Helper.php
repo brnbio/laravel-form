@@ -48,16 +48,17 @@ class Helper
 
     /**
      * @param Model|null $context
-     * @param array $options
+     * @param array      $options
+     *
      * @return HtmlString
      */
-    public function create(?Model $context = null, array $options = []): HtmlString
+    public function create(?Model $context = null, array $attributes = []): HtmlString
     {
         if ($context !== null) {
             $this->context = new Context($context);
         }
 
-        return (new Element\FormStart($options))
+        return (new Element\FormStart($attributes))
             ->render();
     }
 
@@ -74,134 +75,161 @@ class Helper
 
     /**
      * @param string $fieldName
-     * @param array  $options
+     * @param array  $attributes
      *
      * @return HtmlString
+     * @throws \Exception
      */
-    public function control(string $fieldName, array $options = []): HtmlString
+    public function control(string $fieldName, array $attributes = []): HtmlString
     {
         if ($this->getContext() === null) {
             throw new \Exception('No context set in form helper.');
         }
         $type = $this->getControlType($fieldName);
+        // TODO
     }
 
     /**
      * @param string $text
-     * @param array $options
+     * @param array  $attributes
+     *
      * @return HtmlString
      */
-    public function label(string $text, array $options = []): HtmlString
+    public function label(string $text, array $attributes = []): HtmlString
     {
-        return (new Element\Label($text, $options))
+        return (new Element\Label($text, $attributes))
             ->render();
     }
 
     /**
      * @param string $type
      * @param string $fieldName
-     * @param array  $options
+     * @param array  $attributes
      *
      * @return HtmlString
      */
-    public function input(string $type, string $fieldName, array $options = []): HtmlString
+    public function input(string $type, string $fieldName, array $attributes = []): HtmlString
     {
-        $options[Element\Input::ATTRIBUTE_TYPE] = $type;
+        $attributes[Element\Input::ATTRIBUTE_TYPE] = $type;
 
-        return (new Element\Input($fieldName, $options))
+        return (new Element\Input($fieldName, $attributes))
             ->render();
     }
 
     /**
      * @param string $fieldName
-     * @param array $options
+     * @param array  $attributes
+     *
      * @return HtmlString
      */
-    public function text(string $fieldName, array $options = []): HtmlString
+    public function text(string $fieldName, array $attributes = []): HtmlString
     {
         if (! isset($options[Element\Input::ATTRIBUTE_VALUE])) {
-            $options[Element\Input::ATTRIBUTE_VALUE] = old($fieldName, e($this->getValue($fieldName)));
+            $attributes[Element\Input::ATTRIBUTE_VALUE] = old($fieldName, e($this->getValue($fieldName)));
         }
 
         return $this->input(
             Element\Input::INPUT_TYPE_TEXT,
             $fieldName,
-            $options
+            $attributes
         );
     }
 
     /**
      * @param string $fieldName
-     * @param array $options
+     * @param array  $attributes
+     *
      * @return HtmlString
      */
-    public function hidden(string $fieldName, array $options = []): HtmlString
+    public function hidden(string $fieldName, array $attributes = []): HtmlString
     {
+        if (! isset($attributes[Element\Input::ATTRIBUTE_STYLE])) {
+            $attributes[Element\Input::ATTRIBUTE_STYLE] = 'display:none;';
+        }
+
         return $this->input(
             Element\Input::INPUT_TYPE_HIDDEN,
             $fieldName,
-            $options
+            $attributes
         );
     }
 
     /**
      * @param string $fieldName
-     * @param array $options
+     * @param array  $attributes
+     *
      * @return HtmlString
      */
-    public function email(string $fieldName, array $options = []): HtmlString
+    public function email(string $fieldName, array $attributes = []): HtmlString
     {
         return $this->input(
             Element\Input::INPUT_TYPE_EMAIL,
             $fieldName,
-            $options
+            $attributes
         );
     }
 
     /**
      * @param string $fieldName
-     * @param array $options
+     * @param array  $attributes
+     *
      * @return HtmlString
      */
-    public function checkbox(string $fieldName, array $options = []): HtmlString
+    public function checkbox(string $fieldName, array $attributes = []): HtmlString
     {
-        return (new Element\Checkbox($fieldName, $options))
+        return (new Element\Checkbox($fieldName, $attributes))
             ->render();
     }
 
     /**
      * @param string $text
-     * @param array $options
+     * @param array  $attributes
+     *
      * @return HtmlString
      */
-    public function button(string $text, array $options = []): HtmlString
+    public function button(string $text, array $attributes = []): HtmlString
     {
-        return (new Element\Button($text, $options))
+        return (new Element\Button($text, $attributes))
             ->render();
     }
 
     /**
      * @param string $text
-     * @param array $options
+     * @param array  $attributes
+     *
      * @return HtmlString
      */
-    public function reset(string $text, array $options = []): HtmlString
+    public function reset(string $text, array $attributes = []): HtmlString
     {
-        $options[Element\Button::ATTRIBUTE_TYPE] = Element\Button::BUTTON_TYPE_RESET;
+        $attributes[Element\Button::ATTRIBUTE_TYPE] = Element\Button::BUTTON_TYPE_RESET;
 
-        return $this->button($text, $options);
+        return $this->button($text, $attributes);
     }
 
     /**
      * @param string $text
-     * @param array $options
+     * @param array  $attributes
+     *
      * @return HtmlString
      */
-    public function submit(string $text, array $options = []): HtmlString
+    public function submit(string $text, array $attributes = []): HtmlString
     {
-        $options[Element\Button::ATTRIBUTE_TYPE] = Element\Button::BUTTON_TYPE_SUBMIT;
+        $attributes[Element\Button::ATTRIBUTE_TYPE] = Element\Button::BUTTON_TYPE_SUBMIT;
 
-        return $this->button($text, $options);
+        return $this->button($text, $attributes);
+    }
+
+    /**
+     * @param string $fieldName
+     * @param array  $options
+     * @param array  $attributes
+     *
+     * @return HtmlString
+     */
+    public function select(string $fieldName, $options = [], array $attributes = []): HtmlString
+    {
+        return (new Element\Select($fieldName, $options, $attributes))
+            ->render();
     }
 
     /**

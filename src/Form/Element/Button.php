@@ -53,14 +53,18 @@ class Button extends AbstractElement
      * Button constructor
      *
      * @param string $text
-     * @param array $options
+     * @param array $attributes
      */
-    public function __construct(string $text, array $options = [])
+    public function __construct(string $text, array $attributes = [])
     {
         parent::__construct();
 
+        if (! isset($attributes[self::ATTRIBUTE_CLASS])) {
+            $attributes[self::ATTRIBUTE_CLASS] = config('laravel-form.css.button');
+        }
+
         $this->text = trim($text);
-        $this->attributes = $this->validateAttributes($options + $this->defaultOptions);
+        $this->attributes = $this->validateAttributes($attributes + $this->defaultOptions);
     }
 
     /**

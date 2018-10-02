@@ -1,14 +1,11 @@
 <?php
 
 /**
- * Label.php
+ * Option.php
  *
- * Caption for a form control.
- *
- * @copyright   Copyright (c) brainbo UG (haftungsbeschränkt) (http://brnb.io)
- * @author      Frank Heider <heider@brnb.io>
- * @since       2018-06-18
- * @link        https://www.w3.org/TR/2010/WD-html-markup-20100624/label.html
+ * @copyright   OEMUS MEDIA AG (https://oemus.com)
+ * @author      Frank Heider <f.heider@oemus-media.de>
+ * @since       02.10.2018
  */
 
 declare(strict_types=1);
@@ -19,17 +16,22 @@ use Brnbio\LaravelForm\Form\AbstractElement;
 use Illuminate\Support\HtmlString;
 
 /**
- * Class Label
+ * Class Option
  *
- * @package Brnbio\LaravelForm
- * @subpackage Form\Element
+ * @package    Brnbio
+ * @subpackage Brnbio\LaravelForm\Form\Element
  */
-class Label extends AbstractElement
+class Option extends AbstractElement
 {
     /**
      * @var string
      */
-    protected $defaultTemplate = '<label{{attrs}}>{{text}}</label>';
+    protected $defaultTemplate = '<option value="{{value}}"{{attrs}}>{{text}}</option>';
+
+    /**
+     * @var mixed
+     */
+    protected $value;
 
     /**
      * @var string
@@ -37,14 +39,16 @@ class Label extends AbstractElement
     protected $text;
 
     /**
-     * Label constructor
+     * Option constructor.
      *
+     * @param        $value
      * @param string $text
-     * @param array $attributes
+     * @param array  $attributes
      */
-    public function __construct(string $text, array $attributes = [])
+    public function __construct($value, string $text, array $attributes = [])
     {
         parent::__construct();
+        $this->value = $value;
         $this->text = trim($text);
         $this->attributes = $this->validateAttributes($attributes);
     }
@@ -56,6 +60,7 @@ class Label extends AbstractElement
     {
         return $this->templater
             ->formatTemplate($this->getTemplate(), [
+                'value' => $this->value,
                 'text' => $this->text,
                 'attrs' => $this->templater->formatAttributes($this->attributes),
             ]);
@@ -63,12 +68,13 @@ class Label extends AbstractElement
 
     /**
      * @param array $attributes
+     *
+     * @return void
      */
     protected function addAdditionalAllowedAttributes(array $attributes = []): void
     {
         parent::addAdditionalAllowedAttributes([
-            self::ATTRIBUTE_FOR,
-            self::ATTRIBUTE_FORM,
+            self::ATTRIBUTE_SELECTED,
         ]);
     }
 }

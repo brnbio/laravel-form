@@ -23,11 +23,13 @@ return [
     */
 
     'css' => [
+        'button' => 'btn btn-primary',
         'checkbox' => 'form-check-input',
         'error' => 'error',
         'input' => 'form-control',
         'inputContainer' => 'form-group',
         'required' => 'required',
+        'select' => 'form-control',
     ],
 
     /*
@@ -38,23 +40,28 @@ return [
     | This option maps the database metadata to a control type. If context
     | is set, the mapping try to get the control type for the field name
     |
+    | Custom types are:
+    | - datetime => 6 select elements: {{day}}{{month}}{{year}}{{hour}}{{minute}}{{seconds}}
+    | - date => 3 select elements: {{day}}{{month}}{{year}}
+    | - time => 3 select elements: {{hour}}{{minute}}{{seconds}}
+    |
     */
 
     'typeMap' => [
-        'string' => 'text',
-        'text' => 'textarea',
-        'uuid' => 'string',
-        'datetime' => 'datetime',
-        'timestamp' => 'datetime',
-        'date' => 'date',
-        'time' => 'time',
-        'boolean' => 'checkbox',
-        'float' => 'number',
-        'integer' => 'number',
-        'tinyinteger' => 'number',
-        'smallinteger' => 'number',
-        'decimal' => 'number',
-        'binary' => 'file',
+        'string'        => 'input:text',
+        'text'          => 'textarea',
+        'uuid'          => 'input:text',
+        'datetime'      => 'datetime',
+        'timestamp'     => 'datetime',
+        'date'          => 'date',
+        'time'          => 'time',
+        'boolean'       => 'input:checkbox',
+        'float'         => 'input:number',
+        'integer'       => 'input:number',
+        'tinyinteger'   => 'input:number',
+        'smallinteger'  => 'input:number',
+        'decimal'       => 'input:number',
+        'binary'        => 'input:file',
     ],
 
     /*
@@ -66,31 +73,30 @@ return [
     |
     */
     'templates' => [
-        // Used for button elements in button().
+
+        // -- button element used by button()
         \Brnbio\LaravelForm\Form\Element\Button::class => '<button{{attrs}}>{{text}}</button>',
 
-        // Open tag used by create().
+        // -- form open tag used by create()
         \Brnbio\LaravelForm\Form\Element\FormStart::class => '<form{{attrs}}>',
 
-        // Close tag used by end().
+        // -- form close tag used by end()
         \Brnbio\LaravelForm\Form\Element\FormEnd::class => '</form>',
 
-        // Generic input element.
+        // -- generic input element
         \Brnbio\LaravelForm\Form\Element\Input::class => '<input name="{{name}}"{{attrs}}/>',
 
-        // Label element when inputs are not nested inside the label.
+        // -- label element used by label()
         \Brnbio\LaravelForm\Form\Element\Label::class => '<label{{attrs}}>{{text}}</label>',
 
-        // Used for checkboxes in checkbox()
+        // -- checkbox element used by checkbox()
         \Brnbio\LaravelForm\Form\Element\Checkbox::class => '{{hiddenField}}<input type="checkbox" name="{{name}}"{{attrs}}/>',
 
-        /*
+        // -- select element with options
+        \Brnbio\LaravelForm\Form\Element\Select::class => '<select name="{{name}}"{{attrs}}>{{content}}</select>',
+        \Brnbio\LaravelForm\Form\Element\Option::class => '<option value="{{value}}"{{attrs}}>{{text}}</option>',
 
-        'checkbox' => '<input type="checkbox" name="{{name}}" value="{{value}}"{{attrs}}>',
-        // Input group wrapper for checkboxes created via control().
-        'checkboxFormGroup' => '{{label}}',
-        // Wrapper container for checkboxes.
-        'checkboxWrapper' => '<div class="checkbox">{{label}}</div>',
+        /*
         // Widget ordering for date/time/datetime pickers.
         'dateWidget' => '{{year}}{{month}}{{day}}{{hour}}{{minute}}{{second}}{{meridian}}',
         // Error message wrapper elements.
@@ -107,44 +113,13 @@ return [
         'inputSubmit' => '<input type="{{type}}"{{attrs}}/>',
         // Container element used by control().
         'inputContainer' => '<div class="input {{type}}{{required}}">{{content}}</div>',
-        // Container element used by control() when a field has an error.
-        'inputContainerError' => '<div class="input {{type}}{{required}} error">{{content}}{{error}}</div>',
-        // Label element when inputs are not nested inside the label.
-        'label' => '<label{{attrs}}>{{text}}</label>',
-        // Label element used for radio and multi-checkbox inputs.
-        'nestingLabel' => '{{hidden}}<label{{attrs}}>{{input}}{{text}}</label>',
         // Legends created by allControls()
         'legend' => '<legend>{{text}}</legend>',
-        // Multi-Checkbox input set title element.
-        'multicheckboxTitle' => '<legend>{{text}}</legend>',
-        // Multi-Checkbox wrapping container.
-        'multicheckboxWrapper' => '<fieldset{{attrs}}>{{content}}</fieldset>',
-        // Option element used in select pickers.
-        'option' => '<option value="{{value}}"{{attrs}}>{{text}}</option>',
-        // Option group element used in select pickers.
-        'optgroup' => '<optgroup label="{{label}}"{{attrs}}>{{content}}</optgroup>',
-        // Select element,
-        'select' => '<select name="{{name}}"{{attrs}}>{{content}}</select>',
-        // Multi-select element,
-        'selectMultiple' => '<select name="{{name}}[]" multiple="multiple"{{attrs}}>{{content}}</select>',
         // Radio input element,
         'radio' => '<input type="radio" name="{{name}}" value="{{value}}"{{attrs}}>',
-        // Wrapping container for radio input/label,
-        'radioWrapper' => '{{label}}',
         // Textarea input element,
         'textarea' => '<textarea name="{{name}}"{{attrs}}>{{value}}</textarea>',
-        // Container for submit buttons.
-        'submitContainer' => '<div class="submit">{{content}}</div>',*/
+        */
+
     ],
-
-    /*'templates' => [
-         => '<button{{attrs}}>{{text}}</button>',
-
-        \Brnbio\LaravelForm\Form\Element\Control::class => '<div{{attrs}}>{{label}}{{control}}</div>',
-         => '</form>',
-         => '<form{{attrs}}>{{csrf}}',
-         => '<input type="{{type}}" name="{{name}}"{{attrs}} />',
-
-    ],*/
-
 ];

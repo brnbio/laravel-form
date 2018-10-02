@@ -44,8 +44,11 @@ abstract class AbstractElement
     public const ATTRIBUTE_ID = 'id';
     public const ATTRIBUTE_LANG = 'lang';
     public const ATTRIBUTE_METHOD = 'method';
+    public const ATTRIBUTE_MULTIPLE = 'multiple';
     public const ATTRIBUTE_NAME = 'name';
     public const ATTRIBUTE_NO_VALIDATE = 'novalidate';
+    public const ATTRIBUTE_REQUIRED = 'required';
+    public const ATTRIBUTE_SELECTED = 'selected';
     public const ATTRIBUTE_SPELLCHECK = 'spellcheck';
     public const ATTRIBUTE_STYLE = 'style';
     public const ATTRIBUTE_TABINDEX = 'tabindex';
