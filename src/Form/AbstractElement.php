@@ -24,7 +24,7 @@ use Illuminate\Support\HtmlString;
 abstract class AbstractElement
 {
     /**
-     * Attribute names
+     * Possible attributes
      */
     public const ATTRIBUTE_ACCEPT_CHARSET = 'accept-charset';
     public const ATTRIBUTE_ACCESS_KEY = 'accesskey';
@@ -34,7 +34,9 @@ abstract class AbstractElement
     public const ATTRIBUTE_CLASS = 'class';
     public const ATTRIBUTE_CONTENT_EDITABLE = 'contenteditable';
     public const ATTRIBUTE_CONTEXT_MENU = 'contextmenu';
+    public const ATTRIBUTE_COLS = 'cols';
     public const ATTRIBUTE_DIR = 'dir';
+    public const ATTRIBUTE_DIRNAME = 'dirname';
     public const ATTRIBUTE_DISABLED = 'disabled';
     public const ATTRIBUTE_DRAGGABLE = 'draggable';
     public const ATTRIBUTE_ENCTYPE = 'enctype';
@@ -43,11 +45,16 @@ abstract class AbstractElement
     public const ATTRIBUTE_HIDDEN = 'hidden';
     public const ATTRIBUTE_ID = 'id';
     public const ATTRIBUTE_LANG = 'lang';
+    public const ATTRIBUTE_MAXLENGTH = 'maxlength';
+    public const ATTRIBUTE_MINLENGTH = 'minlength';
     public const ATTRIBUTE_METHOD = 'method';
     public const ATTRIBUTE_MULTIPLE = 'multiple';
     public const ATTRIBUTE_NAME = 'name';
     public const ATTRIBUTE_NO_VALIDATE = 'novalidate';
+    public const ATTRIBUTE_PLACEHOLDER = 'placeholder';
+    public const ATTRIBUTE_READONLY = 'readonly';
     public const ATTRIBUTE_REQUIRED = 'required';
+    public const ATTRIBUTE_ROWS = 'rows';
     public const ATTRIBUTE_SELECTED = 'selected';
     public const ATTRIBUTE_SPELLCHECK = 'spellcheck';
     public const ATTRIBUTE_STYLE = 'style';
@@ -56,6 +63,7 @@ abstract class AbstractElement
     public const ATTRIBUTE_TYPE = 'type';
     public const ATTRIBUTE_TITLE = 'title';
     public const ATTRIBUTE_VALUE = 'value';
+    public const ATTRIBUTE_WRAP = 'wrap';
 
     /**
      * @var mixed[]

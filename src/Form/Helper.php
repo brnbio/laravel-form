@@ -233,6 +233,20 @@ class Helper
     }
 
     /**
+     * Create an textarea element
+     *
+     * @param string $fieldName
+     * @param array  $attributes
+     *
+     * @return HtmlString
+     */
+    public function textarea(string $fieldName, array $attributes = []): HtmlString
+    {
+        return (new Element\Textarea($fieldName, $attributes))
+            ->render();
+    }
+
+    /**
      * @return Context|null
      */
     protected function getContext(): ?Context
