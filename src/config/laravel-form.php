@@ -96,19 +96,19 @@ return [
         \Brnbio\LaravelForm\Form\Element\Select::class => '<select name="{{name}}"{{attrs}}>{{content}}</select>',
         \Brnbio\LaravelForm\Form\Element\Option::class => '<option value="{{value}}"{{attrs}}>{{text}}</option>',
 
+        // --textarea input element,
+        \Brnbio\LaravelForm\Form\Element\Textarea::class => '<textarea name="{{name}}"{{attrs}}>{{value}}</textarea>',
+
+        
         /*
         // Widget ordering for date/time/datetime pickers.
         'dateWidget' => '{{year}}{{month}}{{day}}{{hour}}{{minute}}{{second}}{{meridian}}',
-        // Error message wrapper elements.
-        'error' => '<div class="error-message">{{content}}</div>',
         // Fieldset element used by allControls().
         'fieldset' => '<fieldset{{attrs}}>{{content}}</fieldset>',
-
         // General grouping container for control(). Defines input/label ordering.
         'formGroup' => '{{label}}{{input}}',
         // Wrapper content used to hide other content.
         'hiddenBlock' => '<div style="display:none;">{{content}}</div>',
-
         // Submit input element.
         'inputSubmit' => '<input type="{{type}}"{{attrs}}/>',
         // Container element used by control().
@@ -117,8 +117,7 @@ return [
         'legend' => '<legend>{{text}}</legend>',
         // Radio input element,
         'radio' => '<input type="radio" name="{{name}}" value="{{value}}"{{attrs}}>',
-        // Textarea input element,
-        'textarea' => '<textarea name="{{name}}"{{attrs}}>{{value}}</textarea>',
+
         */
 
     ],
