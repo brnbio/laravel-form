@@ -27,7 +27,6 @@ return [
         'checkbox' => 'form-check-input',
         'error' => 'error',
         'input' => 'form-control',
-        'inputContainer' => 'form-group',
         'required' => 'required',
         'select' => 'form-control',
     ],
@@ -99,7 +98,10 @@ return [
         // --textarea input element,
         \Brnbio\LaravelForm\Form\Element\Textarea::class => '<textarea name="{{name}}"{{attrs}}>{{value}}</textarea>',
 
-        
+
+        // -- control widget
+        \Brnbio\LaravelForm\Form\Widget\Control::class => '<div class="form-group">{{content}}</div>'
+
         /*
         // Widget ordering for date/time/datetime pickers.
         'dateWidget' => '{{year}}{{month}}{{day}}{{hour}}{{minute}}{{second}}{{meridian}}',

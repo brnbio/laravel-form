@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace Brnbio\LaravelForm\Form;
 
 use Brnbio\LaravelForm\Form\Element as Element;
+use Brnbio\LaravelForm\Form\Widget as Widget;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\HtmlString;
 
@@ -82,11 +83,12 @@ class Helper
      */
     public function control(string $fieldName, array $attributes = []): HtmlString
     {
-        if ($this->getContext() === null) {
+        /*if ($this->getContext() === null) {
             throw new \Exception('No context set in form helper.');
-        }
-        $type = $this->getControlType($fieldName);
-        // TODO
+        }*/
+
+        return (new Widget\Control($fieldName, $attributes))
+            ->render();
     }
 
     /**
