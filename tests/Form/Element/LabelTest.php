@@ -3,9 +3,9 @@
 /**
  * LabelTest.php
  *
- * @copyright   OEMUS MEDIA AG (https://oemus.com)
- * @author      Frank Heider <f.heider@oemus-media.de>
- * @since       08.10.2018
+ * @copyright   Copyright (c) brainbo UG (haftungsbeschränkt) (http://brnb.io)
+ * @author      Frank Heider <heider@brnb.io>
+ * @since       2018-10-08
  */
 
 declare(strict_types=1);
