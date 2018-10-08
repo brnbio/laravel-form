@@ -77,7 +77,7 @@ return [
         \Brnbio\LaravelForm\Form\Element\Button::class => '<button{{attrs}}>{{text}}</button>',
 
         // -- form open tag used by create()
-        \Brnbio\LaravelForm\Form\Element\FormStart::class => '<form{{attrs}}>',
+        \Brnbio\LaravelForm\Form\Element\FormStart::class => '<form{{attrs}}>{{csrf}}',
 
         // -- form close tag used by end()
         \Brnbio\LaravelForm\Form\Element\FormEnd::class => '</form>',

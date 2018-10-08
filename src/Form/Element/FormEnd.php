@@ -8,7 +8,7 @@
  * @copyright   Copyright (c) brainbo UG (haftungsbeschränkt) (http://brnb.io)
  * @author      Frank Heider <heider@brnb.io>
  * @since       2018-06-18
- * @link        https://www.w3.org/TR/2010/WD-html-markup-20100624/form.html
+ * @link        https://www.w3.org/TR/html/sec-forms.html#the-form-element
  */
 
 declare(strict_types=1);
