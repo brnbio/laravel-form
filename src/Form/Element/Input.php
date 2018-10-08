@@ -106,7 +106,7 @@ class Input extends AbstractElement
             self::ATTRIBUTE_FORM_ENCTYPE,
             self::ATTRIBUTE_FORM_METHOD,
             self::ATTRIBUTE_FORM_NO_VALIDATE,
-            self::ATTRIBUTE_FORMTARGET,
+            self::ATTRIBUTE_FORM_TARGET,
             self::ATTRIBUTE_HEIGHT,
             self::ATTRIBUTE_LIST,
             self::ATTRIBUTE_MAX,

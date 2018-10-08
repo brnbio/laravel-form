@@ -8,9 +8,7 @@
  * @copyright   Copyright (c) brainbo UG (haftungsbeschränkt) (http://brnb.io)
  * @author      Frank Heider <heider@brnb.io>
  * @since       2018-06-19
- * @link        https://www.w3.org/TR/2010/WD-html-markup-20100624/button.button.html
- * @link        https://www.w3.org/TR/2010/WD-html-markup-20100624/button.submit.html
- * @link        https://www.w3.org/TR/2010/WD-html-markup-20100624/button.reset.html
+ * @link        https://www.w3.org/TR/html/sec-forms.html#the-button-element
  */
 
 declare(strict_types=1);
@@ -88,6 +86,11 @@ class Button extends AbstractElement
             self::ATTRIBUTE_AUTOFOCUS,
             self::ATTRIBUTE_DISABLED,
             self::ATTRIBUTE_FORM,
+            self::ATTRIBUTE_FORM_ACTION,
+            self::ATTRIBUTE_FORM_ENCTYPE,
+            self::ATTRIBUTE_FORM_METHOD,
+            self::ATTRIBUTE_FORM_NO_VALIDATE,
+            self::ATTRIBUTE_FORM_TARGET,
             self::ATTRIBUTE_NAME,
             self::ATTRIBUTE_TYPE,
             self::ATTRIBUTE_VALUE,

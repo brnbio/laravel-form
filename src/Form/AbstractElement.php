@@ -49,7 +49,7 @@ abstract class AbstractElement
     public const ATTRIBUTE_FORM_ENCTYPE = 'formenctype';
     public const ATTRIBUTE_FORM_METHOD = 'formmethod';
     public const ATTRIBUTE_FORM_NO_VALIDATE = 'formnovalidate';
-    public const ATTRIBUTE_FORMTARGET = 'formtarget';
+    public const ATTRIBUTE_FORM_TARGET = 'formtarget';
     public const ATTRIBUTE_HEIGHT = 'height';
     public const ATTRIBUTE_HIDDEN = 'hidden';
     public const ATTRIBUTE_ID = 'id';
