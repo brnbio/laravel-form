@@ -27,6 +27,7 @@ abstract class AbstractWidget
      * Widget attributes
      */
     public const ATTRIBUTE_LABEL = 'label';
+    public const ATTRIBUTE_CONTROL = 'control';
     public const ATTRIBUTE_LABEL_TEXT = 'text';
     public const ATTRIBUTE_TYPE = 'type';
 

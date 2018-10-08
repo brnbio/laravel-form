@@ -30,12 +30,7 @@ class Control extends AbstractWidget
     /**
      * @var string
      */
-    protected $defaultTemplate = '<div class="form-group"{{attrs}}>{{content}}</div>';
-
-    /**
-     * @var string
-     */
-    protected $type = 'text';
+    protected $defaultTemplate = '<div class="form-group">{{content}}</div>';
 
     /**
      * @var string
@@ -57,43 +52,21 @@ class Control extends AbstractWidget
     {
         parent::__construct();
 
-        if (isset($attributes[self::ATTRIBUTE_TYPE])) {
-            $this->type = $attributes[self::ATTRIBUTE_TYPE];
-            unset($attributes[self::ATTRIBUTE_TYPE]);
-        }
-
         $this->fieldName = $fieldName;
         $this->attributes = $attributes;
 
-        // -- TODO: if type is another widget type like (date or checkbox), return this widget
+        // -- add label
+        $this->elements[] = $this->getLabel();
+        $this->elements[] = $this->getInput();
 
-        /**
-         * Switch behavior by type
-         */
-        switch ($this->type) {
-            // -- checkbox elements are wrapped into labels
-            case 'checkbox':
-
-                break;
-            case 'text':
-                $this->elements = $this->text();
-                break;
-            // default elements like "normal" input elements with the common structure (div/label/control)
-            default:
-                // -- add label only if not set as false
-                if (!(isset($this->attributes[self::ATTRIBUTE_LABEL])
-                    && $this->attributes[self::ATTRIBUTE_LABEL] === false)) {
-                    $this->elements[] = $this->addLabel();
-                }
-        }
     }
 
     /**
-     * @return AbstractElement[]
+     * @return Element\Label
      */
-    protected function text(): array
+    protected function getLabel(): Element\Label
     {
-        $text = Str::studly($this->fieldName);
+        $labelText = Str::studly($this->fieldName);
         $labelAttributes = [
             'for' => Str::slug($this->fieldName),
         ];
@@ -101,7 +74,8 @@ class Control extends AbstractWidget
         // -- label attributes is only the label content as string
         if (isset($this->attributes[self::ATTRIBUTE_LABEL])
             && !is_array($this->attributes[self::ATTRIBUTE_LABEL])) {
-            $text = $this->attributes[self::ATTRIBUTE_LABEL];
+            $labelText = $this->attributes[self::ATTRIBUTE_LABEL];
+            unset($this->attributes[self::ATTRIBUTE_LABEL]);
         }
 
         // -- label attributes is an array, text key contains the content
@@ -110,27 +84,28 @@ class Control extends AbstractWidget
 
             // -- strip label content
             if (isset($this->attributes[self::ATTRIBUTE_LABEL][self::ATTRIBUTE_LABEL_TEXT])) {
-                $text = $this->attributes[self::ATTRIBUTE_LABEL][self::ATTRIBUTE_LABEL_TEXT];
+                $labelText = $this->attributes[self::ATTRIBUTE_LABEL][self::ATTRIBUTE_LABEL_TEXT];
                 unset($this->attributes[self::ATTRIBUTE_LABEL][self::ATTRIBUTE_LABEL_TEXT]);
             }
 
             // -- merge label attributes
             $labelAttributes = $this->attributes[self::ATTRIBUTE_LABEL] + $labelAttributes;
+            unset($this->attributes[self::ATTRIBUTE_LABEL]);
         }
 
-        /**
-         * label attributes can be a string (label text only) or an array
-         * with the label attributes (like class, for etc.) and the key
-         * "text" represents the label content
-         */
-        if (isset($this->attributes[self::ATTRIBUTE_LABEL])) {
-            if (is_array($this->attributes[self::ATTRIBUTE_LABEL])) {
+        return new Element\Label($labelText, $labelAttributes);
+    }
 
-            } else {
-                $text = $this->attributes[self::ATTRIBUTE_LABEL];
-            }
-        }
+    /**
+     * @return Element\Input
+     */
+    protected function getInput(): Element\Input
+    {
+        $inputAttributes = $this->attributes + [
+            Element\Input::ATTRIBUTE_ID => Str::slug($this->fieldName),
+            Element\Input::ATTRIBUTE_TYPE => Element\Input::INPUT_TYPE_TEXT,
+        ];
 
-        return new Element\Label($text, $labelAttributes);
+        return new Element\Input($this->fieldName, $inputAttributes);
     }
 }

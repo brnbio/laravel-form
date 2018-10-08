@@ -26,11 +26,14 @@ abstract class AbstractElement
     /**
      * Possible attributes
      */
+    public const ATTRIBUTE_ACCEPT = 'accept';
     public const ATTRIBUTE_ACCEPT_CHARSET = 'accept-charset';
     public const ATTRIBUTE_ACCESS_KEY = 'accesskey';
     public const ATTRIBUTE_ACTION = 'action';
+    public const ATTRIBUTE_ALT = 'alt';
     public const ATTRIBUTE_AUTOCOMPLETE = 'autocomplete';
     public const ATTRIBUTE_AUTOFOCUS = 'autofocus';
+    public const ATTRIBUTE_CHECKED = 'checked';
     public const ATTRIBUTE_CLASS = 'class';
     public const ATTRIBUTE_CONTENT_EDITABLE = 'contenteditable';
     public const ATTRIBUTE_CONTEXT_MENU = 'contextmenu';
@@ -42,28 +45,49 @@ abstract class AbstractElement
     public const ATTRIBUTE_ENCTYPE = 'enctype';
     public const ATTRIBUTE_FOR = 'for';
     public const ATTRIBUTE_FORM = 'form';
+    public const ATTRIBUTE_FORM_ACTION = 'formaction';
+    public const ATTRIBUTE_FORM_ENCTYPE = 'formenctype';
+    public const ATTRIBUTE_FORM_METHOD = 'formmethod';
+    public const ATTRIBUTE_FORM_NO_VALIDATE = 'formnovalidate';
+    public const ATTRIBUTE_FORMTARGET = 'formtarget';
+    public const ATTRIBUTE_HEIGHT = 'height';
     public const ATTRIBUTE_HIDDEN = 'hidden';
     public const ATTRIBUTE_ID = 'id';
     public const ATTRIBUTE_LANG = 'lang';
+    public const ATTRIBUTE_LIST = 'list';
+    public const ATTRIBUTE_MAX = 'max';
     public const ATTRIBUTE_MAXLENGTH = 'maxlength';
+    public const ATTRIBUTE_MIN = 'min';
     public const ATTRIBUTE_MINLENGTH = 'minlength';
     public const ATTRIBUTE_METHOD = 'method';
     public const ATTRIBUTE_MULTIPLE = 'multiple';
     public const ATTRIBUTE_NAME = 'name';
     public const ATTRIBUTE_NO_VALIDATE = 'novalidate';
+    public const ATTRIBUTE_PATTERN = 'pattern';
     public const ATTRIBUTE_PLACEHOLDER = 'placeholder';
     public const ATTRIBUTE_READONLY = 'readonly';
     public const ATTRIBUTE_REQUIRED = 'required';
     public const ATTRIBUTE_ROWS = 'rows';
     public const ATTRIBUTE_SELECTED = 'selected';
+    public const ATTRIBUTE_SIZE = 'size';
     public const ATTRIBUTE_SPELLCHECK = 'spellcheck';
+    public const ATTRIBUTE_SRC = 'src';
+    public const ATTRIBUTE_STEP = 'step';
     public const ATTRIBUTE_STYLE = 'style';
     public const ATTRIBUTE_TABINDEX = 'tabindex';
     public const ATTRIBUTE_TARGET = 'target';
     public const ATTRIBUTE_TYPE = 'type';
     public const ATTRIBUTE_TITLE = 'title';
     public const ATTRIBUTE_VALUE = 'value';
+    public const ATTRIBUTE_WIDTH = 'width';
     public const ATTRIBUTE_WRAP = 'wrap';
+
+    public const ATTRIBUTE_VALUE_TRUE = 'true';
+    public const ATTRIBUTE_VALUE_FALSE = 'false';
+    public const ATTRIBUTE_VALUE_ON = 'on';
+    public const ATTRIBUTE_VALUE_OFF = 'off';
+    public const ATTRIBUTE_VALUE_LTR = 'ltr';
+    public const ATTRIBUTE_VALUE_RTL = 'rtl';
 
     /**
      * @var mixed[]
@@ -99,20 +123,20 @@ abstract class AbstractElement
      */
     protected $allowedAttributeValues = [
         self::ATTRIBUTE_CONTENT_EDITABLE => [
-            'true',
-            'false',
+            self::ATTRIBUTE_VALUE_TRUE,
+            self::ATTRIBUTE_VALUE_FALSE,
         ],
         self::ATTRIBUTE_DIR => [
-            'ltr',
-            'rtl',
+            self::ATTRIBUTE_VALUE_LTR,
+            self::ATTRIBUTE_VALUE_RTL,
         ],
         self::ATTRIBUTE_DRAGGABLE => [
-            'true',
-            'false',
+            self::ATTRIBUTE_VALUE_TRUE,
+            self::ATTRIBUTE_VALUE_FALSE,
         ],
         self::ATTRIBUTE_SPELLCHECK => [
-            'true',
-            'false',
+            self::ATTRIBUTE_VALUE_TRUE,
+            self::ATTRIBUTE_VALUE_FALSE,
         ],
     ];
 
