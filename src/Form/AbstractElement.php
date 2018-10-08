@@ -89,6 +89,11 @@ abstract class AbstractElement
     public const ATTRIBUTE_VALUE_LTR = 'ltr';
     public const ATTRIBUTE_VALUE_RTL = 'rtl';
 
+    public const TARGET_BLANK = '_blank';
+    public const TARGET_SELF = '_self';
+    public const TARGET_PARENT = '_parent';
+    public const TARGET_TOP = '_top';
+
     /**
      * @var mixed[]
      */

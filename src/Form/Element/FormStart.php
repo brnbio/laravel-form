@@ -8,7 +8,7 @@
  * @copyright   Copyright (c) brainbo UG (haftungsbeschränkt) (http://brnb.io)
  * @author      Frank Heider <heider@brnb.io>
  * @since       2018-06-18
- * @link        https://www.w3.org/TR/2010/WD-html-markup-20100624/form.html
+ * @link        https://www.w3.org/TR/html/sec-forms.html#the-form-element
  */
 
 declare(strict_types=1);
@@ -96,8 +96,8 @@ class FormStart extends AbstractElement
     {
         parent::addAdditionalAllowedAttributesValues([
             self::ATTRIBUTE_AUTOCOMPLETE => [
-                'on',
-                'off',
+                self::ATTRIBUTE_VALUE_ON,
+                self::ATTRIBUTE_VALUE_OFF,
             ],
             self::ATTRIBUTE_ENCTYPE => [
                 self::FORM_ENCTYPE_DEFAULT,
@@ -111,10 +111,10 @@ class FormStart extends AbstractElement
                 self::FORM_METHOD_DELETE,
             ],
             self::ATTRIBUTE_TARGET => [
-                '_blank',
-                '_self',
-                '_parent',
-                '_top',
+                self::TARGET_BLANK,
+                self::TARGET_PARENT,
+                self::TARGET_SELF,
+                self::TARGET_TOP,
             ],
         ]);
     }
