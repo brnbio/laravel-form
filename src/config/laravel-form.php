@@ -73,34 +73,34 @@ return [
     */
     'templates' => [
 
-        // -- button element used by button()
-        \Brnbio\LaravelForm\Form\Element\Button::class => '<button{{attrs}}>{{text}}</button>',
+        /*
+        |--------------------------------------------------------------------------
+        | Basic elements
+        |--------------------------------------------------------------------------
+        |
+        | Templates for the ingle basic elements
+        |
+        */
 
-        // -- form open tag used by create()
-        \Brnbio\LaravelForm\Form\Element\FormStart::class => '<form{{attrs}}>{{csrf}}',
+        \Brnbio\LaravelForm\Form\Element\Button::class      => '<button{{attrs}}>{{text}}</button>',
+        \Brnbio\LaravelForm\Form\Element\FormStart::class   => '<form{{attrs}}>{{csrf}}',
+        \Brnbio\LaravelForm\Form\Element\FormEnd::class     => '</form>',
+        \Brnbio\LaravelForm\Form\Element\Input::class       => '<input name="{{name}}"{{attrs}}/>',
+        \Brnbio\LaravelForm\Form\Element\Label::class       => '<label{{attrs}}>{{text}}</label>',
+        \Brnbio\LaravelForm\Form\Element\Select::class      => '<select name="{{name}}"{{attrs}}>{{content}}</select>',
+        \Brnbio\LaravelForm\Form\Element\Option::class      => '<option value="{{value}}"{{attrs}}>{{text}}</option>',
+        \Brnbio\LaravelForm\Form\Element\Textarea::class    => '<textarea name="{{name}}"{{attrs}}>{{value}}</textarea>',
 
-        // -- form close tag used by end()
-        \Brnbio\LaravelForm\Form\Element\FormEnd::class => '</form>',
+        /*
+        |--------------------------------------------------------------------------
+        | Widgets
+        |--------------------------------------------------------------------------
+        |
+        | Templates for widgets which contains a wrapper and the elements inside
+        |
+        */
 
-        // -- generic input element
-        \Brnbio\LaravelForm\Form\Element\Input::class => '<input name="{{name}}"{{attrs}}/>',
-
-        // -- label element used by label()
-        \Brnbio\LaravelForm\Form\Element\Label::class => '<label{{attrs}}>{{text}}</label>',
-
-        // -- checkbox element used by checkbox()
-        \Brnbio\LaravelForm\Form\Element\Checkbox::class => '{{hiddenField}}<input type="checkbox" name="{{name}}"{{attrs}}/>',
-
-        // -- select element with options
-        \Brnbio\LaravelForm\Form\Element\Select::class => '<select name="{{name}}"{{attrs}}>{{content}}</select>',
-        \Brnbio\LaravelForm\Form\Element\Option::class => '<option value="{{value}}"{{attrs}}>{{text}}</option>',
-
-        // --textarea input element,
-        \Brnbio\LaravelForm\Form\Element\Textarea::class => '<textarea name="{{name}}"{{attrs}}>{{value}}</textarea>',
-
-
-        // -- control widget
-        \Brnbio\LaravelForm\Form\Widget\Control::class => '<div class="form-group">{{content}}</div>'
+        \Brnbio\LaravelForm\Form\Widget\Control::class      => '<div class="form-group">{{content}}</div>'
 
         /*
         // Widget ordering for date/time/datetime pickers.
