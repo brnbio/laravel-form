@@ -61,6 +61,6 @@ class LabelTest extends TestCase
      */
     public function testHelper()
     {
-        $this->assertEquals('<label>Test</label>', (string)Helper::getInstance()->label('Test'));
+        $this->assertEquals('<label>Test</label>', (string)form()->label('Test'));
     }
 }
