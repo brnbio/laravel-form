@@ -6,7 +6,7 @@
  * The textarea element represents a multiline plain text edit control.
  * The contents of the control represent the control's default value.
  *
- * @copyright   Copyright (c) brainbo UG (haftungsbeschränkt) (http://brnb.io)
+ * @copyright   Copyright (c) brnbio (http://brnb.io)
  * @author      Frank Heider <heider@brnb.io>
  * @since       2018-10-04
  * @link        https://www.w3.org/TR/html/sec-forms.html#the-textarea-element

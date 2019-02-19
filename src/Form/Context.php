@@ -3,7 +3,7 @@
 /**
  * Context.php
  *
- * @copyright   Copyright (c) brainbo UG (haftungsbeschränkt) (http://brnb.io)
+ * @copyright   Copyright (c) brnbio (http://brnb.io)
  * @author      Frank Heider <heider@brnb.io>
  * @since       2018-06-18
  */
@@ -12,15 +12,12 @@ declare(strict_types=1);
 
 namespace Brnbio\LaravelForm\Form;
 
-use Cake\Database\Connection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
 /**
  * Class Context
- *
- * @package laravel
- * @subpackage Brnbio\LaravelForm\Form
+ * @package Brnbio\LaravelForm\Form
  */
 class Context
 {
@@ -80,7 +77,7 @@ class Context
                 'type' => $fieldType[1],
                 'required' => $field->Null === 'NO' && $field->Default === null,
                 'default' => $field->Default,
-                'maxlength' => ! empty($fieldType[2]) ? $fieldType[2] : null,
+                'maxlength' => ! empty($fieldType[2]) ? (int)$fieldType[2] : null,
             ];
         }
 

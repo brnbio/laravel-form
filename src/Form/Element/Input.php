@@ -5,7 +5,7 @@
  *
  * The input element represents a one-line plain text edit control for the input element’s value.
  *
- * @copyright   Copyright (c) brainbo UG (haftungsbeschränkt) (http://brnb.io)
+ * @copyright   Copyright (c) brnbio (http://brnb.io)
  * @author      Frank Heider <heider@brnb.io>
  * @since       2018-06-22
  * @link        https://www.w3.org/TR/html5/sec-forms.html#the-input-element
