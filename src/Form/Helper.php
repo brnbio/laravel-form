@@ -103,11 +103,12 @@ class Helper
         $attributes += [
             'type' => $this->getType($fieldName),
         ];
-        if ($metadata['required']) {
+
+        if ($metadata['required'] ?? false) {
             $attributes[] = 'required';
         }
 
-        if ($attributes['type'] === 'checkbox' && (int)$metadata['default'] === 1) {
+        if ($attributes['type'] === 'checkbox' && ($metadata['default'] ?? false)) {
             $attributes[] = 'checked';
         }
 
