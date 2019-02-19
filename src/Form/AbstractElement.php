@@ -3,7 +3,7 @@
 /**
  * AbstractElement.php
  *
- * @copyright   Copyright (c) brainbo UG (haftungsbeschränkt) (http://brnb.io)
+ * @copyright   Copyright (c) brnbio (http://brnb.io)
  * @author      Frank Heider <heider@brnb.io>
  * @since       2018-06-18
  */

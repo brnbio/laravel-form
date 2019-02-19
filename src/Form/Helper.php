@@ -3,7 +3,7 @@
 /**
  * Helper.php
  *
- * @copyright   Copyright (c) brainbo UG (haftungsbeschränkt) (http://brnb.io)
+ * @copyright   Copyright (c) brnbio (http://brnb.io)
  * @author      Frank Heider <heider@brnb.io>
  * @since       2018-06-18
  */
@@ -18,13 +18,21 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\HtmlString;
 
 /**
- * Class Form
- *
- * @package    laravel
- * @subpackage Brnbio\LaravelForm
+ * Class Helper
+ * @package Brnbio\LaravelForm\Form
  */
 class Helper
 {
+    public const CONTROL_TYPE_TEXT = 'text';
+    public const CONTROL_TYPE_TEXTAREA = 'textarea';
+    public const CONTROL_TYPE_SELECT = 'select';
+    public const CONTROL_TYPE_PASSWORD = 'password';
+    public const CONTROL_TYPE_CHECKBOX = 'checkbox';
+    public const CONTROL_TYPE_EMAIL = 'email';
+    public const CONTROL_TYPE_NUMBER = 'number';
+    public const CONTROL_TYPE_DATE = 'date';
+    public const CONTROL_TYPE_DATETIME = 'datetime';
+
     /**
      * @var Helper
      */
@@ -49,7 +57,7 @@ class Helper
 
     /**
      * @param string $text
-     * @param array  $attributes
+     * @param array $attributes
      *
      * @return HtmlString
      */
@@ -61,7 +69,7 @@ class Helper
 
     /**
      * @param string $fieldName
-     * @param array  $attributes
+     * @param array $attributes
      *
      * @return HtmlString
      */
@@ -86,24 +94,45 @@ class Helper
 
     /**
      * @param string $fieldName
-     * @param array  $attributes
-     *
+     * @param array $attributes
      * @return HtmlString
-     * @throws \Exception
      */
     public function control(string $fieldName, array $attributes = []): HtmlString
     {
-        // -- TODO: get type by context and insert the related widget
+        $metadata = $this->getMetadata($fieldName);
+        $attributes += [
+            'type' => $this->getType($fieldName),
+        ];
+        if ($metadata['required']) {
+            $attributes[] = 'required';
+        }
 
-        return (new Widget\Control($fieldName, $attributes))
+        if ($attributes['type'] === 'checkbox' && (int)$metadata['default'] === 1) {
+            $attributes[] = 'checked';
+        }
+
+        switch ($attributes['type']) {
+            case 'select':
+                return (new Widget\SelectWidget($fieldName, $attributes))
+                    ->render();
+                break;
+            case 'textarea':
+                return (new Widget\TextareaWidget($fieldName, $attributes))
+                    ->render();
+                break;
+            case 'checkbox':
+                return (new Widget\CheckboxWidget($fieldName, $attributes))
+                    ->render();
+                break;
+        }
+
+        return (new Widget\InputWidget($fieldName, $attributes))
             ->render();
     }
 
-
     /**
      * @param Model|null $context
-     * @param array      $options
-     *
+     * @param array $attributes
      * @return HtmlString
      */
     public function create(?Model $context = null, array $attributes = []): HtmlString
@@ -118,7 +147,7 @@ class Helper
 
     /**
      * @param string $fieldName
-     * @param array  $attributes
+     * @param array $attributes
      *
      * @return HtmlString
      */
@@ -144,7 +173,7 @@ class Helper
 
     /**
      * @param string $fieldName
-     * @param array  $attributes
+     * @param array $attributes
      *
      * @return HtmlString
      */
@@ -165,7 +194,7 @@ class Helper
     /**
      * @param string $type
      * @param string $fieldName
-     * @param array  $attributes
+     * @param array $attributes
      *
      * @return HtmlString
      */
@@ -179,7 +208,7 @@ class Helper
 
     /**
      * @param string $text
-     * @param array  $attributes
+     * @param array $attributes
      *
      * @return HtmlString
      */
@@ -191,7 +220,7 @@ class Helper
 
     /**
      * @param string $text
-     * @param array  $attributes
+     * @param array $attributes
      *
      * @return HtmlString
      */
@@ -204,8 +233,8 @@ class Helper
 
     /**
      * @param string $fieldName
-     * @param array  $options
-     * @param array  $attributes
+     * @param array $options
+     * @param array $attributes
      *
      * @return HtmlString
      */
@@ -217,7 +246,7 @@ class Helper
 
     /**
      * @param string $text
-     * @param array  $attributes
+     * @param array $attributes
      *
      * @return HtmlString
      */
@@ -230,7 +259,7 @@ class Helper
 
     /**
      * @param string $fieldName
-     * @param array  $attributes
+     * @param array $attributes
      *
      * @return HtmlString
      */
@@ -251,7 +280,7 @@ class Helper
      * Create an textarea element
      *
      * @param string $fieldName
-     * @param array  $attributes
+     * @param array $attributes
      *
      * @return HtmlString
      */
@@ -267,19 +296,6 @@ class Helper
     protected function getContext(): ?Context
     {
         return $this->context;
-    }
-
-    /**
-     * @param string $fieldName
-     *
-     * @return string
-     */
-    private function getControlType(string $fieldName): string
-    {
-        // Todo
-        $type = $this->getMetadata($fieldName);
-
-        return 'input';
     }
 
     /**
@@ -310,5 +326,58 @@ class Helper
         }
 
         return null;
+    }
+
+    /**
+     * @param string $fieldName
+     * @return string
+     */
+    private function getType(string $fieldName): string
+    {
+        $metadata = $this->getMetadata($fieldName);
+        $result = self::CONTROL_TYPE_TEXT;
+
+        // -- type by column type
+        if (!empty($metadata['type'])) {
+            switch ($metadata['type']) {
+                case 'text':
+                case 'tinytext':
+                case 'mediumtext':
+                case 'longtext':
+                    $result = self::CONTROL_TYPE_TEXTAREA;
+                    break;
+                case 'date':
+                    $result = self::CONTROL_TYPE_DATE;
+                    break;
+                case 'datetime':
+                    $result = self::CONTROL_TYPE_DATETIME;
+                    break;
+                case 'int':
+                case 'integer':
+                case 'tinyint':
+                case 'smallint':
+                case 'bigint':
+                case 'mediumint':
+                    $result = $metadata['maxlength'] === 1 ? self::CONTROL_TYPE_CHECKBOX : self::CONTROL_TYPE_NUMBER;
+                    break;
+            }
+        }
+
+        // -- password fields
+        if (in_array($fieldName, ['password', 'password_confirm'])) {
+            $result = self::CONTROL_TYPE_PASSWORD;
+        }
+
+        // -- field names with ending '_id' seems to be a relationship
+        if (preg_match('/_id$/', $fieldName)) {
+            $result = self::CONTROL_TYPE_SELECT;
+        }
+
+        // -- email
+        if ($fieldName === 'email') {
+            $result = self::CONTROL_TYPE_EMAIL;
+        }
+
+        return $result;
     }
 }
