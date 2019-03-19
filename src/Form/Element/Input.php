@@ -56,9 +56,11 @@ class Input extends AbstractElement
     protected $fieldName;
 
     /**
-     * @var string
+     * Add hidden field to prevent that no value is set
+     *
+     * @var bool
      */
-    protected $type;
+    protected $hiddenField = true;
 
     /**
      * Input constructor.
@@ -73,6 +75,11 @@ class Input extends AbstractElement
         if (! isset($attributes[self::ATTRIBUTE_CLASS])) {
             $attributes[self::ATTRIBUTE_CLASS] = config('laravel-form.css.input');
         }
+
+        if ( isset($attributes['hiddenField']) && $attributes['hiddenField'] === false) {
+            $this->hiddenField = false;
+        }
+
         $this->fieldName = $fieldName;
         $this->attributes = $this->validateAttributes($attributes + $this->defaultAttributes);
     }
@@ -82,8 +89,17 @@ class Input extends AbstractElement
      */
     public function render(): HtmlString
     {
+        $hiddenField = '';
+        if ($this->attributes[self::ATTRIBUTE_TYPE] === self::INPUT_TYPE_CHECKBOX && $this->hiddenField) {
+            $element = new Input($this->fieldName, [
+                self::ATTRIBUTE_TYPE => self::INPUT_TYPE_HIDDEN,
+                self::ATTRIBUTE_VALUE => 0,
+            ]);
+            $hiddenField .= $element->render();
+        }
+
         return $this->templater
-            ->formatTemplate($this->getTemplate(), [
+            ->formatTemplate($hiddenField . $this->getTemplate(), [
                 'name' => $this->fieldName,
                 'attrs' => $this->templater->formatAttributes($this->attributes),
             ]);
