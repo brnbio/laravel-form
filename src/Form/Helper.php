@@ -75,19 +75,10 @@ class Helper
      */
     public function checkbox(string $fieldName, array $attributes = []): HtmlString
     {
-        $checkbox = '';
         $attributes += [
             Element\Input::ATTRIBUTE_CLASS => config('laravel-form.css.checkbox'),
         ];
-
-        // -- add hidden field with value 0 to force sending the given field to request
-        if ($attributes['hiddenField'] ?? true) {
-            $checkbox .= $this->hidden($fieldName, [
-                Element\Input::ATTRIBUTE_VALUE => 0,
-            ]);
-        }
-
-        $checkbox .= $this->input(Element\Input::INPUT_TYPE_CHECKBOX, $fieldName, $attributes);
+        $checkbox = $this->input(Element\Input::INPUT_TYPE_CHECKBOX, $fieldName, $attributes);
 
         return new HtmlString($checkbox);
     }
@@ -110,6 +101,12 @@ class Helper
 
         if ($attributes['type'] === 'checkbox' && ($metadata['default'] ?? false)) {
             $attributes[] = 'checked';
+        }
+
+        // -- try to add a value if nothing is set
+        if (!isset($options[Element\Input::ATTRIBUTE_VALUE]) &&
+            $attributes['type'] !== Element\Input::INPUT_TYPE_PASSWORD) {
+            $attributes[Element\Input::ATTRIBUTE_VALUE] = old($fieldName, e($this->getValue($fieldName)));
         }
 
         switch ($attributes['type']) {
@@ -266,10 +263,6 @@ class Helper
      */
     public function text(string $fieldName, array $attributes = []): HtmlString
     {
-        if (!isset($options[Element\Input::ATTRIBUTE_VALUE])) {
-            $attributes[Element\Input::ATTRIBUTE_VALUE] = old($fieldName, e($this->getValue($fieldName)));
-        }
-
         return $this->input(
             Element\Input::INPUT_TYPE_TEXT,
             $fieldName,
@@ -321,7 +314,7 @@ class Helper
     private function getValue(string $fieldName): ?string
     {
         if ($this->getContext()) {
-            return $this->getContext()
+            return (string) $this->getContext()
                 ->getEntity()
                 ->getAttribute($fieldName);
         }
