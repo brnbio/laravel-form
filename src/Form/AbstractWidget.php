@@ -72,7 +72,11 @@ abstract class AbstractWidget
             $this->attributes[AbstractElement::ATTRIBUTE_ID] = Str::slug($fieldName);
         }
 
-        $this->generateElements();
+        // -- generate elements
+        if (!(isset($this->attributes[self::ATTRIBUTE_LABEL]) && $this->attributes[self::ATTRIBUTE_LABEL] === false)) {
+            $this->elements['label'] = $this->getLabel();
+        }
+        $this->elements['control'] = $this->getControl();
     }
 
     /**
@@ -129,17 +133,6 @@ abstract class AbstractWidget
         }
 
         return new Element\Label($labelText, $labelAttributes);
-    }
-
-    /**
-     * @return AbstractWidget
-     */
-    protected function generateElements(): self
-    {
-        $this->elements['label'] = $this->getLabel();
-        $this->elements['control'] = $this->getControl();
-
-        return $this;
     }
 
     /**
