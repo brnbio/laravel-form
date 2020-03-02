@@ -69,7 +69,9 @@ class Context
     private function initMetadata(string $tableName): array
     {
         $metadata = [];
-        $fields = DB::connection()->select('SHOW FIELDS FROM ' . $tableName);
+        $connection = $this->getEntity()->getConnection();
+        $fields = $connection->select('SHOW FIELDS FROM ' . $tableName);
+
         foreach ($fields as $field) {
             preg_match('/([a-z]+)\(*(\d*)\)*\s?([a-z\s]*)/', $field->Type, $fieldType);
             $metadata[$field->Field] = [
