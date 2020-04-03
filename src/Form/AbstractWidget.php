@@ -45,7 +45,7 @@ abstract class AbstractWidget
      *
      * @var string
      */
-    protected $defaultTemplate = '<div class="form-group">{{label}}{{control}}</div>';
+    protected $defaultTemplate = '<div class="form-group">{{label}}{{control}}{{errors}}</div>';
 
     /**
      * @var string
@@ -53,20 +53,27 @@ abstract class AbstractWidget
     protected $fieldName;
 
     /**
-     * @var array
+     * @var string[]
      */
     protected $attributes;
+
+    /**
+     * @var string[]
+     */
+    protected $fieldErrors;
 
     /**
      * AbstractWidget constructor.
      * @param string $fieldName
      * @param array $attributes
+     * @param array $fieldErrors
      */
-    public function __construct(string $fieldName, array $attributes = [])
+    public function __construct(string $fieldName, array $attributes = [], array $fieldErrors = [])
     {
         $this->templater = new StringTemplate();
         $this->fieldName = $fieldName;
         $this->attributes = $attributes;
+        $this->fieldErrors = $fieldErrors;
 
         if (empty($this->attributes[AbstractElement::ATTRIBUTE_ID])) {
             $this->attributes[AbstractElement::ATTRIBUTE_ID] = Str::slug($fieldName);
@@ -94,6 +101,10 @@ abstract class AbstractWidget
     {
         foreach ($this->elements as &$element) {
             $element = $element->render();
+        }
+
+        if (!empty($this->fieldErrors)) {
+            $this->elements['errors'] = '<div class="invalid-feedback">' . implode('<br>', $this->fieldErrors) . '</div>';
         }
 
         return $this->templater

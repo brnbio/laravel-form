@@ -16,6 +16,7 @@ use Brnbio\LaravelForm\Form\Element as Element;
 use Brnbio\LaravelForm\Form\Widget as Widget;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\HtmlString;
+use Illuminate\Support\ViewErrorBag;
 
 /**
  * Class Helper
@@ -93,7 +94,18 @@ class Helper
         $metadata = $this->getMetadata($fieldName);
         $attributes += [
             'type' => $this->getType($fieldName),
+            'class' => 'form-control',
         ];
+
+        $fieldErrors = [];
+        $errors = session()->get('errors');
+        if (!empty($errors) && $errors->get($fieldName)) {
+            $fieldErrors = $errors->get($fieldName);
+        }
+
+        if (!empty($fieldErrors)) {
+            $attributes['class'] .= ' is-invalid';
+        }
 
         if ($metadata['required'] ?? false) {
             $attributes[] = 'required';
@@ -124,7 +136,7 @@ class Helper
                 break;
         }
 
-        return (new Widget\InputWidget($fieldName, $attributes))
+        return (new Widget\InputWidget($fieldName, $attributes, $fieldErrors))
             ->render();
     }
 
