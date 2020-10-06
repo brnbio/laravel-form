@@ -94,7 +94,6 @@ class Helper
         $metadata = $this->getMetadata($fieldName);
         $attributes += [
             'type' => $this->getType($fieldName),
-            'class' => 'form-control',
         ];
 
         $fieldErrors = [];
