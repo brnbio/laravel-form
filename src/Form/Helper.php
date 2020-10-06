@@ -116,7 +116,7 @@ class Helper
         }
 
         // -- try to add a value if nothing is set
-        if (!isset($options[Element\Input::ATTRIBUTE_VALUE]) &&
+        if (!isset($attributes[Element\Input::ATTRIBUTE_VALUE]) &&
             $attributes['type'] !== Element\Input::INPUT_TYPE_PASSWORD) {
             $attributes[Element\Input::ATTRIBUTE_VALUE] = old($fieldName, e($this->getValue($fieldName)));
         }
