@@ -20,6 +20,7 @@ use Brnbio\LaravelForm\Form\Element as Element;
 
 /**
  * Class CheckboxWidget
+ *
  * @package Brnbio\LaravelForm\Form\Widget
  */
 class CheckboxWidget extends AbstractWidget
@@ -41,7 +42,7 @@ class CheckboxWidget extends AbstractWidget
         if (empty($attributes[self::ATTRIBUTE_LABEL])) {
             $attributes[self::ATTRIBUTE_LABEL] = [];
         } else {
-            if (!is_array($attributes[self::ATTRIBUTE_LABEL])) {
+            if ( !is_array($attributes[self::ATTRIBUTE_LABEL])) {
                 $attributes[self::ATTRIBUTE_LABEL] = [
                     self::ATTRIBUTE_LABEL_TEXT => $attributes[self::ATTRIBUTE_LABEL],
                 ];
@@ -61,11 +62,12 @@ class CheckboxWidget extends AbstractWidget
     protected function getControl(): AbstractElement
     {
         $inputAttributes = $this->attributes + [
-            Element\Input::ATTRIBUTE_TYPE => Element\Input::INPUT_TYPE_CHECKBOX,
+            Element\Input::ATTRIBUTE_TYPE  => Element\Input::INPUT_TYPE_CHECKBOX,
             Element\Input::ATTRIBUTE_CLASS => 'form-check-input',
+            Element\Input::ATTRIBUTE_VALUE => 1,
         ];
 
-        if (!empty($this->fieldErrors)) {
+        if ( !empty($this->fieldErrors)) {
             $inputAttributes[Element\Input::ATTRIBUTE_CLASS] .= ' ' . config('laravel-form.css.invalid');
         }
 
