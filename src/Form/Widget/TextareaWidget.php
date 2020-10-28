@@ -29,6 +29,14 @@ class TextareaWidget extends AbstractWidget
      */
     protected function getControl(): AbstractElement
     {
-        return new Element\Textarea($this->fieldName, $this->attributes);
+        $inputAttributes = $this->attributes + [
+                Element\Input::ATTRIBUTE_CLASS => config('laravel-form.css.input'),
+            ];
+
+        if (!empty($this->fieldErrors)) {
+            $inputAttributes[Element\Input::ATTRIBUTE_CLASS] .= ' ' . config('laravel-form.css.invalid');
+        }
+
+        return new Element\Textarea($this->fieldName, $inputAttributes);
     }
 }

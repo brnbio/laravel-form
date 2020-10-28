@@ -34,10 +34,15 @@ class SelectWidget extends AbstractWidget
 
         $attributes = $this->attributes + [
             'empty' => '---',
+            Element\Input::ATTRIBUTE_CLASS => config('laravel-form.css.input'),
         ];
 
         if (isset($attributes['empty']) && $attributes['empty'] === false) {
             unset($attributes['empty']);
+        }
+
+        if (!empty($this->fieldErrors)) {
+            $attributes[Element\Input::ATTRIBUTE_CLASS] .= ' ' . config('laravel-form.css.invalid');
         }
 
         return new Element\Select($this->fieldName, $options, $attributes);

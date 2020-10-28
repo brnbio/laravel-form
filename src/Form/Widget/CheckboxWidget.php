@@ -31,10 +31,12 @@ class CheckboxWidget extends AbstractWidget
 
     /**
      * CheckboxWidget constructor.
+     *
      * @param string $fieldName
      * @param array $attributes
+     * @param array $fieldErrors
      */
-    public function __construct(string $fieldName, array $attributes = [])
+    public function __construct(string $fieldName, array $attributes = [], array $fieldErrors = [])
     {
         if (empty($attributes[self::ATTRIBUTE_LABEL])) {
             $attributes[self::ATTRIBUTE_LABEL] = [];
@@ -50,7 +52,7 @@ class CheckboxWidget extends AbstractWidget
             Element\Label::ATTRIBUTE_CLASS => 'form-check-label',
         ];
 
-        parent::__construct($fieldName, $attributes);
+        parent::__construct($fieldName, $attributes, $fieldErrors);
     }
 
     /**
@@ -62,6 +64,10 @@ class CheckboxWidget extends AbstractWidget
             Element\Input::ATTRIBUTE_TYPE => Element\Input::INPUT_TYPE_CHECKBOX,
             Element\Input::ATTRIBUTE_CLASS => 'form-check-input',
         ];
+
+        if (!empty($this->fieldErrors)) {
+            $inputAttributes[Element\Input::ATTRIBUTE_CLASS] .= ' ' . config('laravel-form.css.invalid');
+        }
 
         return new Element\Input($this->fieldName, $inputAttributes);
     }

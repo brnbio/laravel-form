@@ -102,10 +102,6 @@ class Helper
             $fieldErrors = $errors->get($fieldName);
         }
 
-        if (!empty($fieldErrors)) {
-            $attributes['class'] .= ' is-invalid';
-        }
-
         if ($metadata['required'] ?? false) {
             $attributes[] = 'required';
         }
@@ -122,15 +118,15 @@ class Helper
 
         switch ($attributes['type']) {
             case 'select':
-                return (new Widget\SelectWidget($fieldName, $attributes))
+                return (new Widget\SelectWidget($fieldName, $attributes, $fieldErrors))
                     ->render();
                 break;
             case 'textarea':
-                return (new Widget\TextareaWidget($fieldName, $attributes))
+                return (new Widget\TextareaWidget($fieldName, $attributes, $fieldErrors))
                     ->render();
                 break;
             case 'checkbox':
-                return (new Widget\CheckboxWidget($fieldName, $attributes))
+                return (new Widget\CheckboxWidget($fieldName, $attributes, $fieldErrors))
                     ->render();
                 break;
         }

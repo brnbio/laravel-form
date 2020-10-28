@@ -29,6 +29,7 @@ return [
         'input' => 'form-control',
         'required' => 'required',
         'select' => 'form-control',
+        'invalid' => 'is-invalid',
     ],
 
     /*

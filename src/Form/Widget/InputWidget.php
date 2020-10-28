@@ -31,7 +31,12 @@ class InputWidget extends AbstractWidget
     {
         $inputAttributes = $this->attributes + [
             Element\Input::ATTRIBUTE_TYPE => Element\Input::INPUT_TYPE_TEXT,
+            Element\Input::ATTRIBUTE_CLASS => config('laravel-form.css.input'),
         ];
+
+        if (!empty($this->fieldErrors)) {
+            $inputAttributes[Element\Input::ATTRIBUTE_CLASS] .= ' ' . config('laravel-form.css.invalid');
+        }
 
         return new Element\Input($this->fieldName, $inputAttributes);
     }
