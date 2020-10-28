@@ -365,8 +365,8 @@ class Helper
             }
         }
 
-        // -- password fields
-        if (in_array($fieldName, ['password', 'password_confirm'])) {
+        // -- sounds like there is a password
+        if (strpos($fieldName, 'password') !== false) {
             $result = self::CONTROL_TYPE_PASSWORD;
         }
 
