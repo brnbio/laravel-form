@@ -114,6 +114,7 @@ class Input extends AbstractElement
             self::ATTRIBUTE_ACCEPT,
             self::ATTRIBUTE_ALT,
             self::ATTRIBUTE_AUTOCOMPLETE,
+            self::ATTRIBUTE_AUTOFOCUS,
             self::ATTRIBUTE_CHECKED,
             self::ATTRIBUTE_DIRNAME,
             self::ATTRIBUTE_DISABLED,
