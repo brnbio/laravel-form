@@ -58,9 +58,9 @@ return [
         | Widgets
         |--------------------------------------------------------------------------
         */
-        \Brnbio\LaravelForm\Form\Widget\InputWidget::class => '<div class="form-group form-text">{{label}}{{control}}{{errors}}</div>',
-        \Brnbio\LaravelForm\Form\Widget\CheckboxWidget::class => '<div class="form-check">{{control}}{{label}}</div>',
-        \Brnbio\LaravelForm\Form\Widget\SelectWidget::class => '<div class="form-group form-select">{{label}}{{control}}</div>',
-        \Brnbio\LaravelForm\Form\Widget\TextareaWidget::class => '<div class="form-group form-textarea">{{label}}{{control}}</div>',
+        \Brnbio\LaravelForm\Form\Widget\InputWidget::class => '<div class="form-group input-widget">{{label}}{{control}}{{errors}}</div>',
+        \Brnbio\LaravelForm\Form\Widget\CheckboxWidget::class => '<div class="form-check checkbox-widget">{{control}}{{label}}</div>',
+        \Brnbio\LaravelForm\Form\Widget\SelectWidget::class => '<div class="form-group select-widget">{{label}}{{control}}</div>',
+        \Brnbio\LaravelForm\Form\Widget\TextareaWidget::class => '<div class="form-group textarea-widget">{{label}}{{control}}</div>',
     ],
 ];
