@@ -48,15 +48,19 @@ class Select extends AbstractElement
     public function __construct(string $fieldName, array $options = [], array $attributes = [])
     {
         parent::__construct();
+        $defaultValue = $attributes[self::ATTRIBUTE_VALUE] ?? [];
+        if (!is_array($defaultValue)) {
+            $defaultValue = [$defaultValue];
+        }
 
         // -- init option elements
         foreach ($options as $value => $option) {
             // -- add selected attribute if value of select is value of this option
             $optionAttributes = [];
-            if (isset($attributes[self::ATTRIBUTE_VALUE])
-                && $attributes[self::ATTRIBUTE_VALUE] == $value) {
+            if (in_array($value, $defaultValue)) {
                 $optionAttributes[] = self::ATTRIBUTE_SELECTED;
             }
+
             // -- option is given as array with value and additional attributes
             if (is_array($option)) {
                 $this->options[] = new Option($value, (string)$option['text'], $optionAttributes + $option['attributes']);
