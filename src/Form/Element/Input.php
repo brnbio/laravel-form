@@ -92,10 +92,10 @@ class Input extends AbstractElement
     {
         $hiddenField = '';
 
-        dd($this->attributes);
-
-
-        if ($this->attributes[self::ATTRIBUTE_TYPE] === self::INPUT_TYPE_CHECKBOX && $this->hiddenField) {
+        if (
+            !empty($this->attributes[self::ATTRIBUTE_TYPE])
+            && $this->attributes[self::ATTRIBUTE_TYPE] === self::INPUT_TYPE_CHECKBOX
+            && $this->hiddenField) {
             $element = new Input($this->fieldName, [
                 self::ATTRIBUTE_TYPE => self::INPUT_TYPE_HIDDEN,
                 self::ATTRIBUTE_VALUE => 0,
