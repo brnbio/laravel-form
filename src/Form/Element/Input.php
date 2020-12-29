@@ -28,6 +28,7 @@ use phpDocumentor\Reflection\Types\Self_;
 class Input extends AbstractElement
 {
     public const INPUT_TYPE_CHECKBOX = 'checkbox';
+    public const INPUT_TYPE_DATE = 'date';
     public const INPUT_TYPE_DATETIME_LOCAL = 'datetime-local';
     public const INPUT_TYPE_EMAIL = 'email';
     public const INPUT_TYPE_FILE = 'file';
@@ -90,6 +91,10 @@ class Input extends AbstractElement
     public function render(): HtmlString
     {
         $hiddenField = '';
+
+        dd($this->attributes);
+
+
         if ($this->attributes[self::ATTRIBUTE_TYPE] === self::INPUT_TYPE_CHECKBOX && $this->hiddenField) {
             $element = new Input($this->fieldName, [
                 self::ATTRIBUTE_TYPE => self::INPUT_TYPE_HIDDEN,
@@ -158,6 +163,7 @@ class Input extends AbstractElement
             ],
             self::ATTRIBUTE_TYPE => [
                 self::INPUT_TYPE_CHECKBOX,
+                self::INPUT_TYPE_DATE,
                 self::INPUT_TYPE_DATETIME_LOCAL,
                 self::INPUT_TYPE_EMAIL,
                 self::INPUT_TYPE_FILE,
