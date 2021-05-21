@@ -106,8 +106,11 @@ class Helper
             $attributes[] = 'required';
         }
 
-        if ($attributes['type'] === 'checkbox' && ($metadata['default'] ?? false)) {
-            $attributes[] = 'checked';
+        if ($attributes['type'] === 'checkbox') {
+            $default = $this->getValue($fieldName) ?: ($metadata['default'] ?? false);
+            if (old($fieldName, $default)) {
+                $attributes[] = 'checked';
+            }
         }
 
         // -- try to add a value if nothing is set
