@@ -120,6 +120,13 @@ class Helper
             $attributes[Element\Input::ATTRIBUTE_VALUE] = old($fieldName, e($this->getValue($fieldName)));
         }
 
+        // -- floating controls
+        if (config('laravel-form.controls.floating')
+            && !empty($attributes['label'])
+            && empty($attributes['placeholder'])) {
+            $attributes['placeholder'] = $attributes['label'];
+        }
+
         switch ($attributes['type']) {
             case 'select':
                 return (new Widget\SelectWidget($fieldName, $attributes, $fieldErrors))
