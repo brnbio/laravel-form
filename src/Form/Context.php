@@ -12,8 +12,11 @@ declare(strict_types=1);
 
 namespace Brnbio\LaravelForm\Form;
 
+use DateInterval;
 use Illuminate\Database\Connection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Cache;
+use Psr\SimpleCache\InvalidArgumentException;
 
 /**
  * Class Context
@@ -22,6 +25,10 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Context
 {
+    public const CACHE_METADATA_STORAGE = 'file';
+    public const CACHE_METADATA_PREFIX = '_db_metadata_';
+    public const CACHE_METADATA_TTL = 'P1Y';
+
     /**
      * @var Model
      */
@@ -36,6 +43,7 @@ class Context
      * Context constructor.
      *
      * @param Model $entity
+     * @throws InvalidArgumentException
      */
     public function __construct(Model $entity)
     {
@@ -67,17 +75,27 @@ class Context
     /**
      * @param string $tableName
      * @return array
+     * @throws InvalidArgumentException
      */
     private function initMetadata(string $tableName): array
     {
+        $metadata = $this->getMetadataFromCache($tableName);
+        if ( !empty($metadata)) {
+            return $metadata;
+        }
+
         $connection = $this->getEntity()->getConnection();
 
         if ($connection->getDriverName() === 'mysql') {
-            return $this->getMysqlMetadata($connection, $tableName);
+            $metadata = $this->getMysqlMetadata($connection, $tableName);
+
+            return $this->storeMetadataToCache($tableName, $metadata);
         }
 
         if ($connection->getDriverName() === 'sqlite') {
-            return $this->getSqliteMetadata($connection, $tableName);
+            $metadata = $this->getSqliteMetadata($connection, $tableName);
+
+            return $this->storeMetadataToCache($tableName, $metadata);
         }
 
         return [];
@@ -126,5 +144,40 @@ class Context
         }
 
         return $metadata;
+    }
+
+    /**
+     * @param string $tableName
+     * @param array $metadata
+     * @return array
+     */
+    private function storeMetadataToCache(string $tableName, array $metadata): array
+    {
+        $key = $this->getCacheKey($tableName);
+        Cache::store(self::CACHE_METADATA_STORAGE)
+            ->put($key, $metadata, new DateInterval(self::CACHE_METADATA_TTL));
+
+        return $metadata;
+    }
+
+    /**
+     * @param string $tableName
+     * @return array
+     * @throws InvalidArgumentException
+     */
+    private function getMetadataFromCache(string $tableName): array
+    {
+        $key = $this->getCacheKey($tableName);
+
+        return Cache::store(self::CACHE_METADATA_STORAGE)->get($key, []);
+    }
+
+    /**
+     * @param string $tableName
+     * @return string
+     */
+    private function getCacheKey(string $tableName): string
+    {
+        return self::CACHE_METADATA_PREFIX . $tableName;
     }
 }

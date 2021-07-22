@@ -34,7 +34,7 @@ class SelectWidget extends AbstractWidget
 
         $attributes = $this->attributes + [
             'empty' => '---',
-            Element\Input::ATTRIBUTE_CLASS => config('laravel-form.css.input'),
+            Element\Input::ATTRIBUTE_CLASS => config('laravel-form.css.select'),
         ];
 
         if (isset($attributes['empty']) && $attributes['empty'] === false) {
