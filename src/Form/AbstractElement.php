@@ -38,6 +38,7 @@ abstract class AbstractElement
     public const ATTRIBUTE_CONTENT_EDITABLE = 'contenteditable';
     public const ATTRIBUTE_CONTEXT_MENU = 'contextmenu';
     public const ATTRIBUTE_COLS = 'cols';
+    public const ATTRIBUTE_DATA = 'data-';
     public const ATTRIBUTE_DIR = 'dir';
     public const ATTRIBUTE_DIRNAME = 'dirname';
     public const ATTRIBUTE_DISABLED = 'disabled';
@@ -131,15 +132,15 @@ abstract class AbstractElement
             self::ATTRIBUTE_VALUE_TRUE,
             self::ATTRIBUTE_VALUE_FALSE,
         ],
-        self::ATTRIBUTE_DIR => [
+        self::ATTRIBUTE_DIR              => [
             self::ATTRIBUTE_VALUE_LTR,
             self::ATTRIBUTE_VALUE_RTL,
         ],
-        self::ATTRIBUTE_DRAGGABLE => [
+        self::ATTRIBUTE_DRAGGABLE        => [
             self::ATTRIBUTE_VALUE_TRUE,
             self::ATTRIBUTE_VALUE_FALSE,
         ],
-        self::ATTRIBUTE_SPELLCHECK => [
+        self::ATTRIBUTE_SPELLCHECK       => [
             self::ATTRIBUTE_VALUE_TRUE,
             self::ATTRIBUTE_VALUE_FALSE,
         ],
@@ -184,7 +185,7 @@ abstract class AbstractElement
      */
     public function getTemplate(): string
     {
-        return (string)config('laravel-form.templates.' . static::class) ?: $this->defaultTemplate;
+        return (string) config('laravel-form.templates.' . static::class) ?: $this->defaultTemplate;
     }
 
     /**
@@ -194,13 +195,20 @@ abstract class AbstractElement
     protected function validateAttributes(array $options = [], array $exclude = []): array
     {
         foreach ($options as $key => $value) {
+
             // -- single word options like disabled or required
             if (is_numeric($key)) {
                 unset($options[$key]);
                 $key = $value;
                 $options[$key] = $value;
             }
-            if (! in_array($key, $this->allowedAttributes, true) || in_array($key, $exclude)) {
+
+            // -- skip data attributes
+            if (strpos($key, self::ATTRIBUTE_DATA) === 0) {
+                continue;
+            }
+
+            if ( !in_array($key, $this->allowedAttributes, true) || in_array($key, $exclude)) {
                 unset($options[$key]);
             } else {
                 if ($this->validateAttributeValue($key, $options[$key]) === false) {
@@ -239,6 +247,6 @@ abstract class AbstractElement
             return true;
         }
 
-        return ! empty($value) && in_array($value, $this->allowedAttributeValues[$key], true);
+        return !empty($value) && in_array($value, $this->allowedAttributeValues[$key], true);
     }
 }
