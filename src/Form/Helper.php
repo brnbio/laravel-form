@@ -335,9 +335,11 @@ class Helper
     private function getValue(string $fieldName, $default = null)
     {
         if ($this->getContext()) {
-            return $this->getContext()
+            $value = $this->getContext()
                 ->getEntity()
-                ->getAttribute($fieldName) ?: $default;
+                ->getAttribute($fieldName);
+
+            return is_null($value) ? $default : $value;
         }
 
         return $default;
