@@ -16,10 +16,11 @@ use Brnbio\LaravelForm\Form\Element as Element;
 use Brnbio\LaravelForm\Form\Widget as Widget;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\HtmlString;
-use Illuminate\Support\ViewErrorBag;
+use Psr\SimpleCache\InvalidArgumentException;
 
 /**
  * Class Helper
+ *
  * @package Brnbio\LaravelForm\Form
  */
 class Helper
@@ -28,6 +29,7 @@ class Helper
     public const CONTROL_TYPE_TEXTAREA = 'textarea';
     public const CONTROL_TYPE_SELECT = 'select';
     public const CONTROL_TYPE_PASSWORD = 'password';
+    public const CONTROL_TYPE_SEARCH = 'search';
     public const CONTROL_TYPE_CHECKBOX = 'checkbox';
     public const CONTROL_TYPE_EMAIL = 'email';
     public const CONTROL_TYPE_NUMBER = 'number';
@@ -98,7 +100,7 @@ class Helper
 
         $fieldErrors = [];
         $errors = session()->get('errors');
-        if (!empty($errors) && $errors->get($fieldName)) {
+        if ( !empty($errors) && $errors->get($fieldName)) {
             $fieldErrors = $errors->get($fieldName);
         }
 
@@ -107,14 +109,14 @@ class Helper
         }
 
         if ($attributes['type'] === 'checkbox') {
-            $default = $this->getValue($fieldName) ?: ($metadata['default'] ?? false);
+            $default = (bool) $this->getValue($fieldName, $metadata['default'] ?? false);
             if (old($fieldName, $default)) {
                 $attributes[] = 'checked';
             }
         }
 
         // -- try to add a value if nothing is set
-        if (!isset($attributes[Element\Input::ATTRIBUTE_VALUE])
+        if ( !isset($attributes[Element\Input::ATTRIBUTE_VALUE])
             && $attributes['type'] !== Element\Input::INPUT_TYPE_CHECKBOX
             && $attributes['type'] !== Element\Input::INPUT_TYPE_PASSWORD) {
             $attributes[Element\Input::ATTRIBUTE_VALUE] = old($fieldName, e($this->getValue($fieldName)));
@@ -150,6 +152,7 @@ class Helper
      * @param Model|null $context
      * @param array $attributes
      * @return HtmlString
+     * @throws InvalidArgumentException
      */
     public function create(?Model $context = null, array $attributes = []): HtmlString
     {
@@ -254,7 +257,7 @@ class Helper
      *
      * @return HtmlString
      */
-    public function select(string $fieldName, $options = [], array $attributes = []): HtmlString
+    public function select(string $fieldName, array $options = [], array $attributes = []): HtmlString
     {
         return (new Element\Select($fieldName, $options, $attributes))
             ->render();
@@ -326,18 +329,18 @@ class Helper
 
     /**
      * @param string $fieldName
-     *
-     * @return string|null
+     * @param mixed|null $default
+     * @return mixed|null
      */
-    private function getValue(string $fieldName): ?string
+    private function getValue(string $fieldName, $default = null)
     {
         if ($this->getContext()) {
-            return (string) $this->getContext()
+            return $this->getContext()
                 ->getEntity()
-                ->getAttribute($fieldName);
+                ->getAttribute($fieldName) ?: $default;
         }
 
-        return null;
+        return $default;
     }
 
     /**
@@ -350,7 +353,7 @@ class Helper
         $result = self::CONTROL_TYPE_TEXT;
 
         // -- type by column type
-        if (!empty($metadata['type'])) {
+        if ( !empty($metadata['type'])) {
             switch ($metadata['type']) {
                 case 'text':
                 case 'tinytext':
@@ -388,6 +391,11 @@ class Helper
         // -- email
         if ($fieldName === 'email') {
             $result = self::CONTROL_TYPE_EMAIL;
+        }
+
+        // -- you want a search
+        if (strpos($fieldName, 'search') !== false) {
+            $result = self::CONTROL_TYPE_SEARCH;
         }
 
         return $result;
